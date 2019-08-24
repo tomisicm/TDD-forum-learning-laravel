@@ -29,6 +29,15 @@ class ThreadsTest extends TestCase
             ->assertJson([$thread->toArray()]);
         // TODO there has to be cleaner than putting [] in assert
 
+    }
+
+    /** @test */
+    public function a_user_can_get_single_threads()
+    {
+        $user = factory(User::class)->create();
+
+        $thread = factory(Thread::class)->create();
+
         $this->actingAs($user)->get(action('ThreadController@show', $thread))
             ->assertOk()
             ->assertSee($thread->id)
