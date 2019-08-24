@@ -18,16 +18,6 @@ class ThreadController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -35,7 +25,16 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $attributes = [
+            'title' => request('title'),
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ];
+
+        $thread = Thread::create($attributes);
+
+        return $thread;
     }
 
     /**

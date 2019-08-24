@@ -65,4 +65,22 @@ class ThreadsTest extends TestCase
             ->assertSee($replies->thread_id)
             ->assertSee($replies->body);
     }
+
+    /** @test */
+    public function a_user_can_create_thread()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $thread = factory(Thread::class)->make();
+        unset($thread->user_id);
+
+        $this->actingAs($user)->post(action('ThreadController@store'), $thread->toArray())
+            ->assertStatus(201)
+            ->assertSee($thread->id)
+            ->assertSee($thread->title)
+            ->assertSee($thread->body)
+            ->assertJson($thread->toArray());
+    }
 }
