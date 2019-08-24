@@ -99,5 +99,7 @@ class ThreadsTest extends TestCase
             ->assertSee($thread->title)
             ->assertSee($thread->body)
             ->assertJson($thread->toArray());
+
+        // TODO EXTRACT METHOD FOR GETTING THING
     }
 }
