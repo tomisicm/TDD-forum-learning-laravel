@@ -2,28 +2,28 @@
 
 namespace Tests\Unit;
 
-use App\Reply;
-use App\User;
-use App\Thread;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ReplyTest extends TestCase
+use App\User;
+use App\Thread;
+use App\Reply;
+
+class ThreadTest extends TestCase
 {
     use DatabaseMigrations;
 
     /** @test */
-    public function reply_belongs_to_user()
+    public function thread_belongs_to_user()
     {
-        $reply = factory(Reply::class)->create();
+        $thread = factory(Thread::class)->create();
 
-        $this->assertInstanceOf(User::class, $reply->user);
+        $this->assertInstanceOf(User::class, $thread->user);
     }
 
     /** @test */
-    public function reply_belongs_to_thread()
+    public function thread_has_many_replies()
     {
         $reply = factory(Reply::class)->create();
 

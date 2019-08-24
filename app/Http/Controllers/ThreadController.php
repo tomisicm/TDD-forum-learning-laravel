@@ -46,7 +46,7 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread)
     {
-        return $thread->load(['replies']);
+        return $thread->with(['user', 'replies.user'])->get();
     }
 
     /**
