@@ -46,10 +46,10 @@ class ThreadsTest extends TestCase
         $this->actingAs($user)->get(action('ThreadController@show', $this->thread))
             ->assertOk()
             ->assertSee($this->thread->id)
-            ->assertSee($this->thread->user_id)
+            ->assertSee($this->thread->creator)
             ->assertSee($this->thread->title)
             ->assertSee($this->thread->body)
-            ->assertJson($this->thread->toArray());
+            ->assertJson([$this->thread->toArray()]);
     }
 
     /** @test */
