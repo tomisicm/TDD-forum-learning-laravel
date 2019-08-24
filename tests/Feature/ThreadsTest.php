@@ -14,20 +14,26 @@ class ThreadsTest extends TestCase
 {
     use DatabaseMigrations, RefreshDatabase;
 
+    private $thread;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->thread = factory(Thread::class)->create();
+    }
+
     /** @test */
     public function a_user_can_get_threads()
     {
         $user = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-
         $this->actingAs($user)->get(action('ThreadController@index'))
             ->assertOk()
-            ->assertSee($thread->id)
-            ->assertSee($thread->user_id)
-            ->assertSee($thread->title)
-            ->assertSee($thread->body)
-            ->assertJson([$thread->toArray()]);
+            ->assertSee($this->thread->id)
+            ->assertSee($this->thread->user_id)
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body)
+            ->assertJson([$this->thread->toArray()]);
         // TODO there has to be cleaner than putting [] in assert
 
     }
@@ -37,15 +43,13 @@ class ThreadsTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $thread = factory(Thread::class)->create();
-
-        $this->actingAs($user)->get(action('ThreadController@show', $thread))
+        $this->actingAs($user)->get(action('ThreadController@show', $this->thread))
             ->assertOk()
-            ->assertSee($thread->id)
-            ->assertSee($thread->user_id)
-            ->assertSee($thread->title)
-            ->assertSee($thread->body)
-            ->assertJson($thread->toArray());
+            ->assertSee($this->thread->id)
+            ->assertSee($this->thread->user_id)
+            ->assertSee($this->thread->title)
+            ->assertSee($this->thread->body)
+            ->assertJson($this->thread->toArray());
     }
 
     /** @test */
@@ -53,7 +57,7 @@ class ThreadsTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $replies = factory(Reply::class)->create();
+        $replies = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
 
         $this->actingAs($user)->get(action('ThreadController@show', $replies->thread_id))
             ->assertOk()
