@@ -28,5 +28,13 @@ class ThreadsTest extends TestCase
             ->assertSee($thread->body)
             ->assertJson([$thread->toArray()]);
         // TODO there has to be cleaner than putting [] in assert
+
+        $this->actingAs($user)->get(action('ThreadController@show', $thread))
+            ->assertOk()
+            ->assertSee($thread->id)
+            ->assertSee($thread->user_id)
+            ->assertSee($thread->title)
+            ->assertSee($thread->body)
+            ->assertJson($thread->toArray());
     }
 }
