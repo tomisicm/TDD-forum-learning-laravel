@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Reply;
 use App\User;
 use App\Thread;
 use Tests\TestCase;
@@ -45,5 +46,19 @@ class ThreadsTest extends TestCase
             ->assertSee($thread->title)
             ->assertSee($thread->body)
             ->assertJson($thread->toArray());
+    }
+
+    /** @test */
+    public function a_user_can_get_thread_replies()
+    {
+        $user = factory(User::class)->create();
+
+        $replies = factory(Reply::class)->create();
+
+        $this->actingAs($user)->get(action('ThreadController@show', $replies->thread_id))
+            ->assertOk()
+            ->assertSee($replies->id)
+            ->assertSee($replies->thread_id)
+            ->assertSee($replies->body);
     }
 }

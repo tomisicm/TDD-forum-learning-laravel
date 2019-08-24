@@ -46,7 +46,7 @@ class ThreadController extends Controller
      */
     public function show(Thread $thread)
     {
-        return $thread;
+        return $thread->load(['replies']);
     }
 
     /**
