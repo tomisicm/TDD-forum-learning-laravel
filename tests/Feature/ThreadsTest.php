@@ -62,8 +62,25 @@ class ThreadsTest extends TestCase
         $this->actingAs($user)->get(action('ThreadController@show', $replies->thread_id))
             ->assertOk()
             ->assertSee($replies->id)
-            ->assertSee($replies->thread_id)
+            ->assertSee($replies->thread->id)
             ->assertSee($replies->body);
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_cannot_post()
+    {
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\AuthenticationException');
+
+        $thread = factory(Thread::class)->make();
+        unset($thread->user_id);
+
+        $this->post(action('ThreadController@store'), $thread->toArray())
+            ->assertStatus(201)
+            ->assertSee($thread->id)
+            ->assertSee($thread->title)
+            ->assertSee($thread->body)
+            ->assertJson($thread->toArray());
     }
 
     /** @test */

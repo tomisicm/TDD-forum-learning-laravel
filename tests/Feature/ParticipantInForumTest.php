@@ -15,7 +15,7 @@ class ParticipantInForum extends TestCase
     use DatabaseMigrations, RefreshDatabase;
 
     /** @test */
-    public function an_unauthenticated_user_can_post_reply_in_a_thread()
+    public function an_unauthenticated_user_cannot_post_reply_in_a_thread()
     {
 
         $this->withoutExceptionHandling()
