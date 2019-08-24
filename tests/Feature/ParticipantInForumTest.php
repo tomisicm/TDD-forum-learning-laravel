@@ -26,6 +26,7 @@ class ParticipantInForum extends TestCase
 
 
         $this->post(action('RepliesController@store', $thread), $reply->toArray())
-            ->assertOk();
+            ->assertOk()
+            ->assertSee($reply->body);
     }
 }

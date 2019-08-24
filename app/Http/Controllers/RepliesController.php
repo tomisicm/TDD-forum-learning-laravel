@@ -22,6 +22,8 @@ class RepliesController extends Controller
             'thread_id' => $thread->id
         ];
 
-        $thread->saveReply();
+        $thread->add_reply($attributes);
+
+        return $thread->replies;
     }
 }
