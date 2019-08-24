@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Channel;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,6 +21,14 @@ class ThreadTest extends TestCase
         $thread = factory(Thread::class)->create();
 
         $this->assertInstanceOf(User::class, $thread->creator);
+    }
+
+    /** @test */
+    public function thread_belongs_to_channel()
+    {
+        $thread = factory(Thread::class)->create();
+
+        $this->assertInstanceOf(Channel::class, $thread->channel);
     }
 
     /** @test */
