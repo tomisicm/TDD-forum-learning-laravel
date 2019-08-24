@@ -14,7 +14,7 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        //
+        return Thread::all();
     }
 
     /**
