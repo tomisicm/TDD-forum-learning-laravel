@@ -25,9 +25,9 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_get_threads()
     {
-        $user = factory(User::class)->create();
+        $this->signIn();
 
-        $this->actingAs($user)->get(action('ThreadController@index'))
+        $this->get(action('ThreadController@index'))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->user_id)
@@ -41,9 +41,9 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_get_single_threads()
     {
-        $user = factory(User::class)->create();
+        $this->signIn();
 
-        $this->actingAs($user)->get(action('ThreadController@show', $this->thread))
+        $this->get(action('ThreadController@show', $this->thread))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->creator)
@@ -55,11 +55,11 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_get_thread_replies()
     {
-        $user = factory(User::class)->create();
+        $this->signIn();
 
         $replies = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
 
-        $this->actingAs($user)->get(action('ThreadController@show', $replies->thread_id))
+        $this->get(action('ThreadController@show', $replies->thread_id))
             ->assertOk()
             ->assertSee($replies->id)
             ->assertSee($replies->thread->id)
@@ -86,9 +86,7 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_create_thread()
     {
-        $this->withoutExceptionHandling();
-
-        $user = factory(User::class)->create();
+        $this->signIn($user = factory(User::class)->create());
 
         $thread = factory(Thread::class)->make();
         unset($thread->user_id);
