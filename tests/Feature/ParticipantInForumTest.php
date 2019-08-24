@@ -15,6 +15,20 @@ class ParticipantInForum extends TestCase
     use DatabaseMigrations, RefreshDatabase;
 
     /** @test */
+    public function an_unauthenticated_user_can_post_reply_in_a_thread()
+    {
+
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\AuthenticationException');
+
+        $thread = factory(Thread::class)->create();
+
+        $reply = factory(Reply::class)->make();
+
+        $this->post(action('RepliesController@store', $thread), $reply->toArray());
+    }
+
+    /** @test */
     public function an_authenticated_user_can_post_reply_in_a_thread()
     {
         $this->withoutExceptionHandling();

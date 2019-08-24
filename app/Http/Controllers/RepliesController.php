@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class RepliesController extends Controller
 {
-
     /**
      * Store a newly created reply in storage.
      *
