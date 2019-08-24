@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reply extends Model
 {
+    protected $fillable = ['thread_id', 'user_id', 'body'];
+
     public function thread()
     {
         return $this->belongsTo(Thread::class);
