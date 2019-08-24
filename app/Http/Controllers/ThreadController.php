@@ -29,6 +29,7 @@ class ThreadController extends Controller
         $attributes = [
             'title' => request('title'),
             'body' => request('body'),
+            'channel_id' => request('channel_id'),
             'user_id' => auth()->id()
         ];
 
