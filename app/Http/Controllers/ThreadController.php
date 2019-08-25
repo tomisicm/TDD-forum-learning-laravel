@@ -9,18 +9,16 @@ use Illuminate\Http\Request;
 class ThreadController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * index
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $channel Channel
+     *
+     * @return void
      */
-    public function index($channelSlug = null)
+    public function index(Channel $channel)
     {
-        if ($channelSlug) {
-            $channelId = Channel::whereSlug($channelSlug)->first()->id;
-            $threads = Thread::where('channel_id', $channelId)->get();
-            //dd($threads->toArray());
-            // dd(Thread::all());
-            return $threads;
+        if ($channel->exists) {
+            return $channel->threads()->latest()->get();
         }
         return Thread::all();
     }

@@ -112,7 +112,7 @@ class ThreadsTest extends TestCase
     }
 
 
-    public function a_user_can_filter_threads_according_to_a_tag()
+    public function a_user_can_filter_threads_according_to_a_channel()
     {
         $this->withoutExceptionHandling();
 
