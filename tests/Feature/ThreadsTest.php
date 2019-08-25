@@ -91,12 +91,13 @@ class ThreadsTest extends TestCase
     /** @test */
     public function authenticated_user_can_create_thread()
     {
-        $this->signIn($user = factory(User::class)->create());
+        $this->signIn(factory(User::class)->create());
 
         $thread = factory(Thread::class)->make();
         unset($thread->user_id);
+        unset($thread->channel);
 
-        $this->actingAs($user)->post(action('ThreadController@store'), $thread->toArray())
+        $this->post(action('ThreadController@store', $thread->channel_id), $thread->toArray())
             ->assertStatus(201)
             ->assertSee($thread->id)
             ->assertSee($thread->title)
