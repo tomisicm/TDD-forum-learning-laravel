@@ -48,4 +48,12 @@ class ThreadTest extends TestCase
 
         $this->assertCount(1, $thread->replies);
     }
+
+    // /** @test */
+    // public function a_thread_can_make_a_string_path()
+    // {
+    //     $thread = factory(Thread::class)->create();
+
+    //     $slug = "/threads/{$thread->channel->slug}/$thread->id";
+    // }
 }

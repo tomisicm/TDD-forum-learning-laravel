@@ -27,6 +27,9 @@ class ThreadsTest extends TestCase
     {
         $this->signIn();
 
+        // TODO: thraed needs channel for redirection
+        unset($this->thread->channel);
+
         $this->get(action('ThreadController@index'))
             ->assertOk()
             ->assertSee($this->thread->id)
@@ -43,10 +46,12 @@ class ThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $this->get(action('ThreadController@show', $this->thread))
+        $this->get(action('ThreadController@show', [$this->thread->channel, $this->thread]))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->creator)
+            ->assertSee($this->thread->channel->slug)
+            ->assertSee($this->thread->channel->name)
             ->assertSee($this->thread->title)
             ->assertSee($this->thread->body)
             ->assertJson([$this->thread->toArray()]);
@@ -59,7 +64,7 @@ class ThreadsTest extends TestCase
 
         $replies = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
 
-        $this->get(action('ThreadController@show', $replies->thread_id))
+        $this->get(action('ThreadController@show', [$replies->thread->channel, $replies->thread_id]))
             ->assertOk()
             ->assertSee($replies->id)
             ->assertSee($replies->thread->id)

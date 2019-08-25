@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/threads', 'ThreadController@index');
-Route::get('/threads/{thread}', 'ThreadController@show');
+Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 
 Route::post('/threads', 'ThreadController@store')->middleware('auth');
 
