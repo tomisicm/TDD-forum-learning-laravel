@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Channel;
 use App\Reply;
 use App\User;
 use App\Thread;
@@ -42,11 +43,12 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
+    // TODO: FALSE POSITIVE !
     public function a_user_can_get_single_thread()
     {
         $this->signIn();
 
-        $this->get(action('ThreadController@show', [$this->thread->channel, $this->thread]))
+        $this->get(action('ThreadController@show', [$this->thread->channel->slug, $this->thread]))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->creator)
@@ -105,5 +107,20 @@ class ThreadsTest extends TestCase
             ->assertJson($thread->toArray());
 
         // TODO EXTRACT METHOD FOR GETTING THING
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_according_to_a_tag()
+    {
+        $this->withoutExceptionHandling();
+
+        $other_thread = factory(Thread::class)->create();
+
+        // dd('/threads/' . $this->thread->channel->slug);
+
+        $resp = $this->get(action('ThreadController@index', $this->thread->channel->slug));
+
+        dd(json_decode($resp->content()));
+        //->assertCount(1, $this->thread);
     }
 }

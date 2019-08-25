@@ -13,8 +13,15 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($channelSlug = null)
     {
+        if ($channelSlug) {
+            $channelId = Channel::whereSlug($channelSlug)->first()->id;
+            $threads = Thread::where('channel_id', $channelId)->get();
+            //dd($threads->toArray());
+            // dd(Thread::all());
+            return $threads;
+        }
         return Thread::all();
     }
 
@@ -48,7 +55,8 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        return $thread->with(['channel', 'creator', 'replies.user'])->get();
+        //var_dump($channel->toArray());
+        return json($thread->with(['channel', 'creator', 'replies.user'])->get());
     }
 
     /**
