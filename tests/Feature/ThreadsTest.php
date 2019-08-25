@@ -80,7 +80,7 @@ class ThreadsTest extends TestCase
         $thread = factory(Thread::class)->make();
         unset($thread->user_id);
 
-        $this->post(action('ThreadController@store'), $thread->toArray())
+        $this->post(action('ThreadController@store', $thread->channel->id), $thread->toArray())
             ->assertStatus(201)
             ->assertSee($thread->id)
             ->assertSee($thread->title)
