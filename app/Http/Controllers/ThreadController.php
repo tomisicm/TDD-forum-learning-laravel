@@ -53,10 +53,12 @@ class ThreadController extends Controller
      *
      * @return void
      */
-    public function show(Channel $channel, Thread $thread)
+    public function show($channelSlug, Thread $thread)
     {
-        //var_dump($channel->toArray());
-        return json($thread->with(['channel', 'creator', 'replies.user'])->get());
+        // $channelId = Channel::whereSlug($channelSlug)->first()->id;
+        // $thread = Thread::where('channel_id', $channelId)->get();
+
+        return $thread->with(['channel', 'creator', 'replies.user'])->get();
     }
 
     /**
