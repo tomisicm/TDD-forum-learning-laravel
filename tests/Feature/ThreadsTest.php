@@ -26,12 +26,10 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_get_threads()
     {
-        $this->signIn();
-
         // TODO: thread needs channel for redirection
         unset($this->thread->channel);
 
-        $this->get(action('ThreadController@index', null))
+        $this->get(action('ThreadController@index', ''))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->user_id)
@@ -40,6 +38,21 @@ class ThreadsTest extends TestCase
             ->assertJson([$this->thread->toArray()]);
         // TODO there has to be cleaner than putting [] in assert
 
+    }
+
+    // TODO: tmrw
+    public function a_user_can_get_threads_for_a_given_channel()
+    {
+        $this->withoutExceptionHandling();
+
+        $other_thread = factory(Thread::class)->create();
+
+        // dd('/threads/' . $this->thread->channel->slug);
+
+        $resp = $this->get(action('ThreadController@index', $this->thread->channel->slug));
+
+        // dd(json_decode($resp->content()));
+        //->assertCount(1, $this->thread);
     }
 
     /** @test */
@@ -112,20 +125,5 @@ class ThreadsTest extends TestCase
             ->assertJson($thread->toArray());
 
         // TODO EXTRACT METHOD FOR GETTING THING
-    }
-
-
-    public function a_user_can_filter_threads_according_to_a_channel()
-    {
-        $this->withoutExceptionHandling();
-
-        $other_thread = factory(Thread::class)->create();
-
-        // dd('/threads/' . $this->thread->channel->slug);
-
-        $resp = $this->get(action('ThreadController@index', $this->thread->channel->slug));
-
-        // dd(json_decode($resp->content()));
-        //->assertCount(1, $this->thread);
     }
 }
