@@ -24,15 +24,14 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Channel $channel)
     {
         $attributes = $this->validate($request, [
             'title' => 'required|min:3',
-            'body' => 'required|max:512',
-            'channel_id' => 'required'
+            'body' => 'required|max:512'
         ]);
-
         $attributes['user_id'] = auth()->id();
+        $attributes['channel_id'] = $channel->id;
 
         $thread = Thread::create($attributes);
 

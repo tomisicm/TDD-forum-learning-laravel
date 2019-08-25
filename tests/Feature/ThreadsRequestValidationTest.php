@@ -21,13 +21,27 @@ class ThreadsRequestValidationTests extends TestCase
         $thread = factory(Thread::class)->make([
             'title' => null,
             'body' => null,
-            'channel_id' => null,
             'user_id' => null
         ]);
 
-        $this->post(action('ThreadController@store'), $thread->toArray())
+        $this->post(action('ThreadController@store', [$thread->channel]), $thread->toArray())
             ->assertSessionHasErrors('title')
-            ->assertSessionHasErrors('body')
+            ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function thread_requires_valid_channel()
+    {
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Database\Eloquent\ModelNotFoundException');
+
+        $this->signIn(factory(User::class)->create());
+
+        $thread = factory(Thread::class)->make([
+            'user_id' => null
+        ]);
+
+        $this->post(action('ThreadController@store', ['channel' => 5]), $thread->toArray())
             ->assertSessionHasErrors('channel_id');
     }
 }
