@@ -99,9 +99,12 @@ class ThreadsTest extends TestCase
 
         $thread = factory(Thread::class)->make();
         unset($thread->user_id);
+
+        $slug = $thread->channel->slug;
+
         unset($thread->channel);
 
-        $this->post(action('ThreadController@store', $thread->channel_id), $thread->toArray())
+        $this->post(action('ThreadController@store', $slug), $thread->toArray())
             ->assertStatus(201)
             ->assertSee($thread->id)
             ->assertSee($thread->title)
