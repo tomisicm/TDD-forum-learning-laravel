@@ -27,7 +27,7 @@ class ThreadsTest extends TestCase
     {
         $this->signIn();
 
-        // TODO: thraed needs channel for redirection
+        // TODO: thread needs channel for redirection
         unset($this->thread->channel);
 
         $this->get(action('ThreadController@index'))
@@ -42,7 +42,7 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_get_single_threads()
+    public function a_user_can_get_single_thread()
     {
         $this->signIn();
 
@@ -89,7 +89,7 @@ class ThreadsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_thread()
+    public function authenticated_user_can_create_thread()
     {
         $this->signIn($user = factory(User::class)->create());
 

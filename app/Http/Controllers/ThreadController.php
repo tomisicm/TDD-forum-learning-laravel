@@ -24,15 +24,15 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()
+    public function store(Request $request)
     {
+        $attributes = $this->validate($request, [
+            'title' => 'required|min:3',
+            'body' => 'required|max:512',
+            'channel_id' => 'required'
+        ]);
 
-        $attributes = [
-            'title' => request('title'),
-            'body' => request('body'),
-            'channel_id' => request('channel_id'),
-            'user_id' => auth()->id()
-        ];
+        $attributes['user_id'] = auth()->id();
 
         $thread = Thread::create($attributes);
 
@@ -42,8 +42,10 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
+     * @param  mixed $channel
+     * @param  mixed $thread
+     *
+     * @return void
      */
     public function show(Channel $channel, Thread $thread)
     {
