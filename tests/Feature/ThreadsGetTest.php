@@ -56,6 +56,22 @@ class ThreadsGetTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_get_filter_threads_by_any_username()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn(create(User::class, ['name' => 'Johnn']));
+
+        $johnsThread = create(Thread::class, ['user_id' => auth()->id()]);
+
+        $otherThread = create(Thread::class);
+
+        $this->get(action('ThreadController@index', ['?by=Johnn']))
+            ->assertSee($johnsThread->title)
+            ->assertDontSee($otherThread->title);
+    }
+
+    /** @test */
     // TODO: FALSE POSITIVE !
     public function a_user_can_get_single_thread()
     {
