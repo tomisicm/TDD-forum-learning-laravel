@@ -20,7 +20,7 @@ class ThreadController extends Controller
     public function index(Channel $channel)
     {
         if ($channel->exists) {
-            $threads =  $channel->threads()->latest()->get();
+            $threads =  $channel->threads()->latest();
         } else {
             $threads = Thread::latest();
         }
@@ -31,7 +31,7 @@ class ThreadController extends Controller
             $threads->where('user_id', $user->id);
         }
 
-        $threads = $threads->get();
+        $threads = $threads->with(['channel'])->get();
 
         return $threads;
     }
