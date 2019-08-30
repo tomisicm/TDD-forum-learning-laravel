@@ -40,19 +40,19 @@ class ThreadsGetTest extends TestCase
 
     }
 
-    // TODO: tmrw
+    /** @test */
     public function a_user_can_get_threads_for_a_given_channel()
     {
         $this->withoutExceptionHandling();
 
-        $other_thread = factory(Thread::class)->create();
-
-        // dd('/threads/' . $this->thread->channel->slug);
+        $threadNotInChannel = factory(Thread::class)->create();
 
         $resp = $this->get(action('ThreadController@index', $this->thread->channel->slug));
 
-        // dd(json_decode($resp->content()));
-        //->assertCount(1, $this->thread);
+        $this->assertCount(1, json_decode($resp->content(), true));
+
+        // $thread = json_decode($resp->content());
+        // dd($thread->chanel);
     }
 
     /** @test */
