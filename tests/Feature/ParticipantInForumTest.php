@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ParticipantInForum extends TestCase
 {
-    use DatabaseMigrations, RefreshDatabase;
+    use RefreshDatabase;
 
     /** @test */
     public function an_unauthenticated_user_cannot_post_reply_in_a_thread()

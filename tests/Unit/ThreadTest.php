@@ -13,7 +13,7 @@ use App\Reply;
 
 class ThreadTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
 
     /** @test */
     public function thread_belongs_to_user()

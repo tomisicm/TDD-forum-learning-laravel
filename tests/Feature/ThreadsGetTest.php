@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ThreadsGetTest extends TestCase
 {
-    use DatabaseMigrations, RefreshDatabase;
+    use RefreshDatabase;
 
     private $thread;
 
@@ -27,7 +27,6 @@ class ThreadsGetTest extends TestCase
     public function a_user_can_get_threads()
     {
         // TODO: thread needs channel for redirection
-        unset($this->thread->channel);
 
         $this->get(action('ThreadController@index', ''))
             ->assertOk()
@@ -53,22 +52,6 @@ class ThreadsGetTest extends TestCase
 
         // $thread = json_decode($resp->content());
         // dd($thread->chanel);
-    }
-
-    /** @test */
-    public function a_user_can_get_filter_threads_by_any_username()
-    {
-        $this->withoutExceptionHandling();
-
-        $this->signIn(create(User::class, ['name' => 'Johnn']));
-
-        $johnsThread = create(Thread::class, ['user_id' => auth()->id()]);
-
-        $otherThread = create(Thread::class);
-
-        $this->get(action('ThreadController@index', ['?by=Johnn']))
-            ->assertSee($johnsThread->title)
-            ->assertDontSee($otherThread->title);
     }
 
     /** @test */
@@ -101,5 +84,40 @@ class ThreadsGetTest extends TestCase
             ->assertSee($replies->id)
             ->assertSee($replies->thread->id)
             ->assertSee($replies->body);
+    }
+
+    /** @test */
+    public function a_user_can_get_filter_threads_by_any_username()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn(create(User::class, ['name' => 'Johnn']));
+
+        $johnsThread = create(Thread::class, ['user_id' => auth()->id()]);
+
+        $otherThread = create(Thread::class);
+
+        $this->get(action('ThreadController@index', ['?by=Johnn']))
+            ->assertSee($johnsThread->title)
+            ->assertDontSee($otherThread->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_replies_count()
+    {
+        $this->signIn();
+
+        $threadWithTwoReplies = create(Thread::class);
+        create(Reply::class, ['thread_id' => $threadWithTwoReplies->id], 2);
+
+        $threadWithThreeReplies = create(Thread::class);
+        create(Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
+
+
+        $response = $this->getJson(action('ThreadController@index', ['?popularity=1']))->json();
+
+        // $this->assertEquals([1, 1, 0], array_column($response, 'replies_count'));
+
+        // dd(array_column($response, 'replies_count'));
     }
 }
