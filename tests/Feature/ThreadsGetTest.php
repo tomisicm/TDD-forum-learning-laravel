@@ -107,17 +107,13 @@ class ThreadsGetTest extends TestCase
     {
         $this->signIn();
 
+        // TODO: this thing is creating 2 threads instead of one
         $threadWithTwoReplies = create(Thread::class);
         create(Reply::class, ['thread_id' => $threadWithTwoReplies->id], 2);
 
-        $threadWithThreeReplies = create(Thread::class);
-        create(Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
 
+        $response = $this->getJson(action('ThreadController@index', ['?popular=1']))->json();
 
-        $response = $this->getJson(action('ThreadController@index', ['?popularity=1']))->json();
-
-        // $this->assertEquals([1, 1, 0], array_column($response, 'replies_count'));
-
-        // dd(array_column($response, 'replies_count'));
+        $this->assertEquals([2, 0, 0, 0], array_column($response, 'replies_count'));
     }
 }
