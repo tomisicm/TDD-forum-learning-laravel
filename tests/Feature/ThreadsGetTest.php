@@ -77,7 +77,6 @@ class ThreadsGetTest extends TestCase
     {
         $this->signIn();
 
-        unset($this->thread->channel);
 
         $this->get(action('ThreadController@show', [$this->thread->channel->slug, $this->thread]))
             ->assertOk()
@@ -87,7 +86,7 @@ class ThreadsGetTest extends TestCase
             ->assertSee($this->thread->channel->name)
             ->assertSee($this->thread->title)
             ->assertSee($this->thread->body)
-            ->assertJson([$this->thread->toArray()]);
+            ->assertJson($this->thread->toArray());
     }
 
     /** @test */
