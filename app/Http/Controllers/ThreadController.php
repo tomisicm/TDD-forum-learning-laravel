@@ -20,14 +20,7 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        if ($channel->exists) {
-            $threads =  $channel->threads()->latest();
-        } else {
-            // TODO: if channel does not exist return empty []
-            $threads = Thread::latest();
-        }
-
-        $threads = $threads->filter($filters)->with(['channel', 'creator'])->get();
+        $threads = $this->getThreads($channel, $filters)->with(['channel', 'creator'])->get();
 
         return $threads;
     }
@@ -97,5 +90,23 @@ class ThreadController extends Controller
     public function destroy(Thread $thread)
     {
         //
+    }
+
+    /**
+     * Fetch all relevant threads.
+     *
+     * @param Channel       $channel
+     * @param ThreadFilters $filters
+     * @return mixed
+     */
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
+    {
+        $threads = Thread::latest()->filter($filters);
+
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+
+        return $threads;
     }
 }
