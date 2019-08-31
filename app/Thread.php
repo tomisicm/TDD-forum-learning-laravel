@@ -9,7 +9,6 @@ class Thread extends Model
 {
     protected $fillable = ['title', 'body', 'channel_id', 'user_id'];
 
-    //
     protected static function boot()
     {
         parent::boot();
