@@ -18,4 +18,9 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favorited');
+    }
 }
