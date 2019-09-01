@@ -55,7 +55,10 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        return $thread->load('replies');
+        // TODO: its better here than on the relation
+        return $thread->load(['replies' => function ($query) {
+            $query->withCount('favorites');
+        }]);
     }
 
     /**
