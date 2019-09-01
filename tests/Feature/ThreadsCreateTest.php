@@ -23,7 +23,7 @@ class ThreadsCreateTest extends TestCase
 
         $thread = factory(Thread::class)->make();
 
-        $resp = $this->post(action('ThreadController@store', $thread->channel->id), $thread->toArray());
+        $this->post(action('ThreadController@store', $thread->channel->id), $thread->toArray());
 
         $this->assertDatabaseMissing('threads', $thread->toArray());
     }
@@ -47,6 +47,6 @@ class ThreadsCreateTest extends TestCase
             ->assertSee($thread->body)
             ->assertJson($thread->toArray());
 
-        // TODO EXTRACT METHOD FOR GETTING THING
+        $this->assertDatabaseHas('threads', $thread->toArray());
     }
 }
