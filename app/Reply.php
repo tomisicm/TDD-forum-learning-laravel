@@ -2,8 +2,8 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reply extends Model
 {
@@ -11,6 +11,16 @@ class Reply extends Model
 
     protected $with = ['favorites', 'user'];
 
+    // TODO: counting
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+
+    //     static::addGlobalScope('favoriteCount', function (Builder $builder) {
+    //         $builder->withCount('favorites');
+    //     });
+    // }
 
     public function thread()
     {
@@ -41,4 +51,15 @@ class Reply extends Model
         // return $this->favorites()->where(['user_id' => $user])->exists();
         return !!$this->favorites->where(['user_id' => $user])->count();
     }
+
+    // TODO: counting
+    // /**
+    //  * Get the number of favorites for the reply.
+    //  *
+    //  * @return integer
+    //  */
+    // public function getFavoritesCountAttribute()
+    // {
+    //     return $this->favorites->count();
+    // }
 }

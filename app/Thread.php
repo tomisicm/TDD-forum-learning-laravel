@@ -28,7 +28,8 @@ class Thread extends Model
      */
     public function replies()
     {
-        return $this->hasMany(Reply::class);
+        // TODO: remove if TODO: counting works
+        return $this->hasMany(Reply::class)->withCount('favorites');
     }
 
     /**
