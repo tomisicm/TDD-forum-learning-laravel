@@ -11,4 +11,6 @@ Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middlewa
 
 Route::post('/threads/{thread}/replies', 'RepliesController@store')->middleware('auth');
 
+Route::get('/profile/{user}', 'ProfileController@show');
+
 Auth::routes();

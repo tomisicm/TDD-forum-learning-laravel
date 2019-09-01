@@ -10,8 +10,15 @@ class Channel extends Model
     {
         return 'slug';
     }
+
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    // TODO: 
+    public function getThreadsCountAttribute()
+    {
+        return $this->threads->count();
     }
 }
