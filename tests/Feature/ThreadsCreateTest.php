@@ -22,15 +22,10 @@ class ThreadsCreateTest extends TestCase
             ->expectException('Illuminate\Auth\AuthenticationException');
 
         $thread = factory(Thread::class)->make();
-        unset($thread->user_id);
 
-        // TODO: what the fuck have I been doing?
-        $this->post(action('ThreadController@store', $thread->channel->id), $thread->toArray())
-            ->assertStatus(201)
-            ->assertSee($thread->id)
-            ->assertSee($thread->title)
-            ->assertSee($thread->body)
-            ->assertJson($thread->toArray());
+        $resp = $this->post(action('ThreadController@store', $thread->channel->id), $thread->toArray());
+
+        $this->assertDatabaseMissing('threads', $thread->toArray());
     }
 
     /** @test */
