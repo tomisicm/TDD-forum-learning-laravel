@@ -55,7 +55,7 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        return $thread->load(['channel', 'creator', 'replies.user']);
+        return $thread->load(['channel', 'creator', 'replies.user', 'replies.favorites']);
     }
 
     /**

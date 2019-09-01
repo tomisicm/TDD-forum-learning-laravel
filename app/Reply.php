@@ -28,8 +28,13 @@ class Reply extends Model
     {
         $attributes = ['user_id' => $user];
 
-        if (!$this->favorites()->where($attributes)->exists()) {
+        if (!$this->isFavorited($user)) {
             return $this->favorites()->create($attributes);
         }
+    }
+
+    public function isFavorited($user)
+    {
+        return $this->favorites()->where(['user_id' => $user])->exists();
     }
 }
