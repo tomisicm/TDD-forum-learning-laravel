@@ -10,6 +10,12 @@ class ThreadPolicy
 {
     use HandlesAuthorization;
 
+    // TODO: if Admin one day.
+    // public function before($user)
+    // { 
+
+    // }
+
     /**
      * Determine whether the user can update the thread.
      *
