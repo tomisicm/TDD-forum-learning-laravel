@@ -26,7 +26,7 @@ class Thread extends Model
         // });
 
         static::created(function ($thread) {
-            $thread->recordActivity('thread_created');
+            $thread->recordActivity('created');
         });
     }
 
@@ -41,10 +41,23 @@ class Thread extends Model
     {
         Activity::create([
             'user_id' => auth()->id(),
-            'type' => $event,
+            'type' => $this->getActivityType($event),
             'subject_id' => $this->id,
             'subject_type' => get_class($this)
         ]);
+    }
+
+
+    /**
+     * getActivityType
+     *
+     * @param  string $event
+     *
+     * @return string
+     */
+    protected function getActivityType($event)
+    {
+        return strtolower((new \ReflectionClass($this))->getShortName()) . '_' . $event;
     }
 
     /**
