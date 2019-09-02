@@ -24,6 +24,27 @@ class Thread extends Model
         // static::addGlobalScope('creator', function (Builder $builder) {
         //     $builder->with('creator');
         // });
+
+        static::created(function ($thread) {
+            $thread->recordActivity('thread_created');
+        });
+    }
+
+    /**
+     * recordActivity
+     *
+     * @param  string $event_type
+     *
+     * @return void
+     */
+    public function recordActivity($event)
+    {
+        Activity::create([
+            'user_id' => auth()->id(),
+            'type' => $event,
+            'subject_id' => $this->id,
+            'subject_type' => get_class($this)
+        ]);
     }
 
     /**
