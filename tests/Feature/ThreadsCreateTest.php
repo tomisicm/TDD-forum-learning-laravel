@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Reply;
 use App\User;
 use App\Thread;
 
@@ -79,13 +80,13 @@ class ThreadsCreateTest extends TestCase
     /** @test */
     public function thread_deletion_removes_replies()
     {
-        // $thread = create(Thread::class);
-        // $attributes = $thread->toArray();
-        // $this->signIn($thread->creator);
+        $reply = create(Reply::class);
+        $attributes = $reply->toArray();
+        $this->signIn($reply->thread->creator);
 
-        // $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
-        //     ->assertStatus(204);
+        $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
+            ->assertStatus(204);
 
-        // $this->assertDatabaseMissing('threads', $attributes);
+        $this->assertDatabaseMissing('threads', $attributes);
     }
 }
