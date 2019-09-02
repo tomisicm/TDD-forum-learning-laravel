@@ -92,11 +92,10 @@ class ThreadController extends Controller
      */
     public function destroy(Channel $channel, Thread $thread)
     {
-        if ($thread->creator->id == auth()->id()) {
-            $thread->delete();
-            return response([], 204);
-        }
-        return abort(403);
+        $this->authorize('update', $thread);
+
+        $thread->delete();
+        return response([], 204);
     }
 
     /**
