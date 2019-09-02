@@ -4,6 +4,7 @@ Route::get('/threads', 'ThreadController@index');
 
 Route::get('/threads/{channel}', 'ThreadController@index');
 Route::post('/threads/{channel}', 'ThreadController@store')->middleware('auth');
+Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy')->middleware('auth');
 
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 

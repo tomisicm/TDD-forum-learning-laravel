@@ -90,9 +90,13 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy(Channel $channel, Thread $thread)
     {
-        //
+        if ($thread->creator->id == auth()->id()) {
+            $thread->delete();
+            return response([], 204);
+        }
+        return abort(403);
     }
 
     /**
