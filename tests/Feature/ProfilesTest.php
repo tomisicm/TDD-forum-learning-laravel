@@ -18,11 +18,13 @@ class ProfilesTest extends TestCase
         $user = create(User::class);
 
         $this->get(action('ProfileController@show', $user->name))
-            ->assertSee($user->name);
+            ->assertSee($user->name)
+            ->assertDontSee($user->password)
+            ->assertDontSee($user->remember_token);
     }
 
-    /** @test */
     // TODO: user is not needed since i am on the profile page
+    /** @test */
     public function a_profile_page_displays_threads()
     {
         $thread = create(Thread::class);
