@@ -52,16 +52,16 @@ class ThreadsCreateTest extends TestCase
     }
 
     /** @test */
-    public function an_unauthenticated_user_cannot_delete()
+    public function an_unauthorized_user_cannot_delete_thread()
     {
-        $this->withoutExceptionHandling()
-            ->expectException('Illuminate\Auth\AuthenticationException');
+        $thread = create(Thread::class);
+        $attributes = $thread->toArray();
+        $this->signIn();
 
-        $thread = factory(Thread::class)->make();
+        $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
+            ->assertStatus(403);
 
-        $this->post(action('ThreadController@destroy', [$thread->channel->name, $thread->id]), $thread->toArray());
-
-        $this->assertDatabaseMissing('threads', $thread->toArray());
+        $this->assertDatabaseHas('threads', $attributes);
     }
 
     /** @test */
