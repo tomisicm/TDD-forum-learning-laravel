@@ -4,6 +4,7 @@ namespace App;
 
 trait RecordsActivity
 {
+    protected $events = ['created'];
 
     protected static function bootRecordsActivity()
     {
@@ -20,11 +21,9 @@ trait RecordsActivity
      */
     public function recordActivity($event)
     {
-        Activity::create([
+        $this->activity()->create([
             'user_id' => $this->activityOwner()->id,
-            'type' => $this->getActivityType($event),
-            'subject_id' => $this->id,
-            'subject_type' => get_class($this)
+            'type' => $this->getActivityType($event)
         ]);
     }
 
@@ -51,5 +50,14 @@ trait RecordsActivity
         }
 
         return $this->creator;
+    }
+
+    /**
+     * A activity is assigned a model
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activity()
+    {
+        return $this->morphMany(Activity::class, 'subject');
     }
 }
