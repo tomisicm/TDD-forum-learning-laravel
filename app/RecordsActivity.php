@@ -4,6 +4,14 @@ namespace App;
 
 trait RecordsActivity
 {
+
+    protected static function bootRecordsActivity()
+    {
+        static::created(function ($thread) {
+            $thread->recordActivity('created');
+        });
+    }
+
     /**
      * recordActivity - creates Activity record
      * @param  string $event_type
