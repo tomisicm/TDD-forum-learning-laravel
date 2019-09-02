@@ -9,7 +9,7 @@ class Thread extends Model
 {
     protected $fillable = ['title', 'body', 'channel_id', 'user_id'];
 
-    protected $with = ['channel', 'creator'];
+    protected $with = ['channel'];
 
     protected static function boot()
     {
@@ -19,6 +19,11 @@ class Thread extends Model
         static::addGlobalScope('replyCount', function (Builder $builder) {
             $builder->withCount('replies');
         });
+
+        // TODO:
+        // static::addGlobalScope('creator', function (Builder $builder) {
+        //     $builder->with('creator');
+        // });
     }
 
     /**

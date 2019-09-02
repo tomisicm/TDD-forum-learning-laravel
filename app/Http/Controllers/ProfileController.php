@@ -25,6 +25,8 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
+        // TODO:
+        // return $user->withoutGlobalScope()->load(['threads']);
         return $user->load(['threads']);
     }
 

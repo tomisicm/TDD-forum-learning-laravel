@@ -20,7 +20,7 @@ class ThreadController extends Controller
      */
     public function index(Channel $channel, ThreadFilters $filters)
     {
-        $threads = $this->getThreads($channel, $filters)->get();
+        $threads = $this->getThreads($channel, $filters)->with('creator')->get();
 
         return $threads;
     }
@@ -56,7 +56,7 @@ class ThreadController extends Controller
     public function show(Channel $channel, Thread $thread)
     {
         // TODO: its better here than on the relation
-        return $thread->load(['replies' => function ($query) {
+        return $thread->load('creator')->load(['replies' => function ($query) {
             $query->withCount('favorites');
         }]);
     }
