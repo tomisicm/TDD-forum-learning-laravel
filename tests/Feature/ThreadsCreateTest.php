@@ -30,19 +30,6 @@ class ThreadsCreateTest extends TestCase
     }
 
     /** @test */
-    public function an_unauthenticated_user_cannot_delete()
-    {
-        $this->withoutExceptionHandling()
-            ->expectException('Illuminate\Auth\AuthenticationException');
-
-        $thread = factory(Thread::class)->make();
-
-        $this->post(action('ThreadController@destroy', [$thread->channel->name, $thread->id]), $thread->toArray());
-
-        $this->assertDatabaseMissing('threads', $thread->toArray());
-    }
-
-    /** @test */
     public function authenticated_user_can_create_thread()
     {
         $this->signIn(factory(User::class)->create());
@@ -65,6 +52,19 @@ class ThreadsCreateTest extends TestCase
     }
 
     /** @test */
+    public function an_unauthenticated_user_cannot_delete()
+    {
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\AuthenticationException');
+
+        $thread = factory(Thread::class)->make();
+
+        $this->post(action('ThreadController@destroy', [$thread->channel->name, $thread->id]), $thread->toArray());
+
+        $this->assertDatabaseMissing('threads', $thread->toArray());
+    }
+
+    /** @test */
     public function thread_creator_can_delete_thread()
     {
         $thread = create(Thread::class);
@@ -75,6 +75,12 @@ class ThreadsCreateTest extends TestCase
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('threads', $attributes);
+    }
+
+
+    public function thread_can_be_deleted_by_users_with_permission()
+    {
+        // TODO:
     }
 
     /** @test */
