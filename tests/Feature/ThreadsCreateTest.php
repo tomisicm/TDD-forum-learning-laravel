@@ -51,11 +51,16 @@ class ThreadsCreateTest extends TestCase
         $this->assertDatabaseHas('threads', $thread->toArray());
     }
 
+    // TODO: dedicated method for getting only thread attributes
     /** @test */
     public function an_unauthorized_user_cannot_delete_thread()
     {
         $thread = create(Thread::class);
-        $attributes = $thread->toArray();
+        $attributes = [
+            'id' => $thread->id,
+            'title' => $thread->title,
+            'body' => $thread->body
+        ];
         $this->signIn();
 
         $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
@@ -64,11 +69,18 @@ class ThreadsCreateTest extends TestCase
         $this->assertDatabaseHas('threads', $attributes);
     }
 
+    // TODO: dedicated method for getting only thread attributes
     /** @test */
     public function thread_creator_can_delete_thread()
     {
         $thread = create(Thread::class);
-        $attributes = $thread->toArray();
+
+        $attributes = [
+            'id' => $thread->id,
+            'title' => $thread->title,
+            'body' => $thread->body
+        ];
+
         $this->signIn($thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
@@ -93,6 +105,6 @@ class ThreadsCreateTest extends TestCase
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
 
-        $this->assertDatabaseMissing('threads', $attributes);
+        $this->assertDatabaseMissing('replies', $attributes);
     }
 }
