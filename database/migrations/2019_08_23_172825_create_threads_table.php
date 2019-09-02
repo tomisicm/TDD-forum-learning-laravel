@@ -15,13 +15,13 @@ class CreateThreadsTable extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('channel_id');
             $table->string('title');
             $table->text('body');
             $table->timestamps();
 
-            // $table('user_id')->
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
