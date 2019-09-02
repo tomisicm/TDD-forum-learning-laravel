@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+
     protected $fillable = ['title', 'body', 'channel_id', 'user_id'];
 
     protected $with = ['channel'];
@@ -30,63 +32,18 @@ class Thread extends Model
         });
     }
 
-    /**
-     * recordActivity
-     *
-     * @param  string $event_type
-     *
-     * @return void
-     */
-    public function recordActivity($event)
-    {
-        Activity::create([
-            'user_id' => $this->activityOwner()->id,
-            'type' => $this->getActivityType($event),
-            'subject_id' => $this->id,
-            'subject_type' => get_class($this)
-        ]);
-    }
 
     /**
-     * getActivityType
-     *
-     * @param  string $event
-     *
-     * @return string
-     */
-    protected function getActivityType($event)
-    {
-        return strtolower((new \ReflectionClass($this))->getShortName()) . '_' . $event;
-    }
-
-    /**
-     * activityOwner returns the logged in user 
-     * or activity owner depending on Thread
-     * @return User
-     */
-    protected function activityOwner()
-    {
-        if (auth()->check()) {
-            return auth()->user();
-        }
-
-        return $this->creator;
-    }
-
-    /**
-     * A thread may have many replies.
-     *
+     * A thread may have many replies
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
     {
-        // TODO: remove if TODO: counting works
         return $this->hasMany(Reply::class);
     }
 
     /**
-     * A thread belongs to a creator.
-     *
+     * A thread belongs to a creator
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function creator()
@@ -95,8 +52,7 @@ class Thread extends Model
     }
 
     /**
-     * A thread is assigned a channel.
-     *
+     * A thread is assigned a channel
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function channel()
@@ -105,8 +61,7 @@ class Thread extends Model
     }
 
     /**
-     * Add a reply to the thread.
-     *
+     * Add a reply to the thread
      * @param $reply
      */
     public function add_reply($reply)
@@ -115,8 +70,7 @@ class Thread extends Model
     }
 
     /**
-     * Apply all relevant thread filters.
-     *
+     * Apply all relevant thread filters
      * @param  Builder       $query
      * @param  ThreadFilters $filters
      * @return Builder
