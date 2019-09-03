@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Activity;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class ProfileController extends Controller
     {
         // TODO:
         // reply do not need creator (subject->creator) 
-        $activities = $this->getActivity($user);
+        $activities = Activity::feed($user);
 
         return ['user' => $user, 'activities' => $activities];
     }
@@ -64,14 +65,5 @@ class ProfileController extends Controller
     public function destroy(User $user)
     {
         //
-    }
-
-    protected function getActivity($user)
-    {
-        return $user->activity()
-            ->with('subject')->get()
-            ->groupBy(function ($activity) {
-                return $activity->created_at->format('Y-m-d');
-            });
     }
 }

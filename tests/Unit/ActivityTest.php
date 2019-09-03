@@ -50,4 +50,23 @@ class ActivityTest extends TestCase
         $this->assertEquals(2, Activity::count());
         $this->assertEquals($activity->subject->id, $reply->id);
     }
+
+    /** @test */
+    public function user_has_activity_feed()
+    {
+        $this->signIn();
+        $reply = create(Reply::class);
+
+        // $this->assertDatabaseHas('activities', [
+        //     'user_id' => $reply->user->id,
+        //     'type' => strtolower((new \ReflectionClass($reply))->getShortname()) . '_created',
+        //     'subject_id' => $reply->id,
+        //     'subject_type' => get_class($reply)
+        // ]);
+
+        $activity = Activity::latest()->first();
+
+        $this->assertEquals(2, Activity::count());
+        $this->assertEquals($activity->subject->id, $reply->id);
+    }
 }
