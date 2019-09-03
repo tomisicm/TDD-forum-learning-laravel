@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use RecordsActivity;
+
 
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
-    protected $with = ['favorites', 'user'];
+    protected $with = ['favorites', 'creator'];
 
     // TODO: counting
     // protected static function boot()
@@ -29,9 +29,9 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 
-    public function user()
+    public function creator()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function favorites()
