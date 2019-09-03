@@ -81,7 +81,7 @@ class ThreadsCreateTest extends TestCase
     public function when_thread_is_deleted_activities_are_deleted()
     {
         $thread = create(Thread::class);
-        $activity = $thread->activity->toArray();
+        $activity = $thread->activity->first()->attributesToArray();
 
         $this->signIn($thread->creator);
 
@@ -90,11 +90,7 @@ class ThreadsCreateTest extends TestCase
 
         $this->assertDatabaseMissing('threads', $thread->attributesToArray());
 
-        // TODO: 
-        $this->assertDatabaseMissing('activities', [
-            'subject_id' => $thread->id,
-            'subject_type' => get_class($thread)
-        ]);
+        $this->assertDatabaseMissing('activities', $activity);
     }
 
 
