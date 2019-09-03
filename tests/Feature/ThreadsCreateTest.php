@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Activity;
 use App\Reply;
 use App\User;
 use App\Thread;
@@ -84,13 +85,15 @@ class ThreadsCreateTest extends TestCase
         $threadActivity = $reply->thread->activity->first()->attributesToArray();
         $replyActivity = $reply->activity->first()->attributesToArray();
 
+        // dd($replyActivity);
         $this->signIn($reply->thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('activities', $threadActivity);
-        $this->assertDatabaseMissing('replies', $replyActivity);
+
+        $this->assertCount(0, Activity::all());
     }
 
 
