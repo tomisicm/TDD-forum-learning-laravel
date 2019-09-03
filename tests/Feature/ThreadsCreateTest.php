@@ -32,23 +32,23 @@ class ThreadsCreateTest extends TestCase
     /** @test */
     public function authenticated_user_can_create_thread()
     {
-        $this->signIn(factory(User::class)->create());
 
-        $thread = factory(Thread::class)->make();
-        unset($thread->user_id);
+        $this->signIn($user = factory(User::class)->create());
+
+        $thread = factory(Thread::class)->make([
+            'user_id' => $user->id
+        ]);
 
         $slug = $thread->channel->slug;
-
-        unset($thread->channel);
 
         $this->post(action('ThreadController@store', $slug), $thread->toArray())
             ->assertStatus(201)
             ->assertSee($thread->id)
             ->assertSee($thread->title)
             ->assertSee($thread->body)
-            ->assertJson($thread->toArray());
+            ->assertJson($thread->attributesToArray());
 
-        $this->assertDatabaseHas('threads', $thread->toArray());
+        $this->assertDatabaseHas('threads', $thread->attributesToArray());
     }
 
     // TODO: dedicated method for getting only thread attributes
