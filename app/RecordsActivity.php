@@ -8,6 +8,16 @@ trait RecordsActivity
 
     protected static function bootRecordsActivity()
     {
+        /*
+         * testing purposes only
+         * during testing i usually do not have authenticated user
+         * 
+        
+        if (auth()->user()) {
+            return;
+        }
+        */
+
         foreach (static::getDefaultActivitiesToRecord() as $event) {
 
             static::$event(function ($model) use ($event) {
