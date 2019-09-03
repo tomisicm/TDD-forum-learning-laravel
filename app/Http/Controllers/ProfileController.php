@@ -26,8 +26,10 @@ class ProfileController extends Controller
     public function show(User $user)
     {
         // TODO:
-        // return $user->withoutGlobalScope()->load(['threads']);
-        return $user->load(['threads']);
+        // reply do not need creator (subject->creator) 
+        $activities = $this->getActivity($user);
+
+        return ['user' => $user, 'activities' => $activities];
     }
 
     /**
@@ -62,5 +64,14 @@ class ProfileController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    protected function getActivity($user)
+    {
+        return $user->activity()
+            ->with('subject')->get()
+            ->groupBy(function ($activity) {
+                return $activity->created_at->format('Y-m-d');
+            });
     }
 }
