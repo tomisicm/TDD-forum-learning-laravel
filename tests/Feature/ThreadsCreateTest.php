@@ -99,8 +99,14 @@ class ThreadsCreateTest extends TestCase
     public function thread_deletion_removes_replies()
     {
         $reply = create(Reply::class);
+
+        // TODO: DEAL WITH THIS
+        unset($reply->creator);
+
         $attributes = $reply->toArray();
         $this->signIn($reply->thread->creator);
+
+        // dd($attributes);
 
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
