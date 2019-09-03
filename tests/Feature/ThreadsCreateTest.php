@@ -78,19 +78,19 @@ class ThreadsCreateTest extends TestCase
     }
 
     /** @test */
-    public function when_thread_is_deleted_activities_are_deleted()
+    public function when_thread_is_deleted_all_activities_are_deleted()
     {
-        $thread = create(Thread::class);
-        $activity = $thread->activity->first()->attributesToArray();
+        $reply = create(Reply::class);
+        $threadActivity = $reply->thread->activity->first()->attributesToArray();
+        $replyActivity = $reply->activity->first()->attributesToArray();
 
-        $this->signIn($thread->creator);
+        $this->signIn($reply->thread->creator);
 
-        $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
+        $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
 
-        $this->assertDatabaseMissing('threads', $thread->attributesToArray());
-
-        $this->assertDatabaseMissing('activities', $activity);
+        $this->assertDatabaseMissing('activities', $threadActivity);
+        $this->assertDatabaseMissing('replies', $replyActivity);
     }
 
 
