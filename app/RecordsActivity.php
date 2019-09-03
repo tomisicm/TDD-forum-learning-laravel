@@ -8,9 +8,23 @@ trait RecordsActivity
 
     protected static function bootRecordsActivity()
     {
-        static::created(function ($thread) {
-            $thread->recordActivity('created');
-        });
+        foreach (static::getDefaultActivitiesToRecord() as $event) {
+
+            static::$event(function ($model) use ($event) {
+                $model->recordActivity($event);
+            });
+        };
+    }
+
+    /**
+     * getDefaultActivitiesToRecord - returns  
+     * array of default events to be registered
+     *
+     * @return Array
+     */
+    protected static function getDefaultActivitiesToRecord()
+    {
+        return ['created'];
     }
 
     /**
