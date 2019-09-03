@@ -85,13 +85,13 @@ class ThreadsCreateTest extends TestCase
         $threadActivity = $reply->thread->activity->first()->attributesToArray();
         $replyActivity = $reply->activity->first()->attributesToArray();
 
-        // dd($replyActivity);
         $this->signIn($reply->thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('activities', $threadActivity);
+        $this->assertDatabaseMissing('activities', $replyActivity);
 
         $this->assertCount(0, Activity::all());
     }
