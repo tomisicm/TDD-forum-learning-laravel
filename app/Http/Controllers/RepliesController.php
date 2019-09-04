@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use App\Reply;
 use Illuminate\Http\Request;
 
 class RepliesController extends Controller
@@ -24,5 +25,19 @@ class RepliesController extends Controller
         $thread->add_reply($attributes);
 
         return $thread->replies;
+    }
+
+    /**
+     * Delete a newly created reply in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('delete', $reply);
+        $reply->delete();
+
+        return response([], 204);
     }
 }

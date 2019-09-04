@@ -26,6 +26,8 @@ class ParticipantInForum extends TestCase
         $reply = factory(Reply::class)->make();
 
         $this->post(action('RepliesController@store', $thread), $reply->toArray());
+
+        $this->assertDatabaseMissing('replies', $reply);
     }
 
     /** @test */
@@ -42,5 +44,36 @@ class ParticipantInForum extends TestCase
         $this->post(action('RepliesController@store', $thread), $reply->toArray())
             ->assertOk()
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function reply_can_be_deleted_by_reply_owner()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn($user = factory(User::class)->create());
+        $reply = factory(Reply::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->delete(action('RepliesController@destroy', $reply))
+            ->assertStatus(204);
+
+        $this->assertDatabaseMissing('replies', $reply->attributesToArray());
+    }
+
+    /** @test */
+    public function reply_cannot_be_deleted_by_other_users()
+    {
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\Access\AuthorizationException');
+
+        $this->signIn();
+        $reply = factory(Reply::class)->create();
+
+        $this->delete(action('RepliesController@destroy', $reply))
+            ->assertStatus(204);
+
+        $this->assertDatabaseHas('replies', $reply->attributesToArray());
     }
 }
