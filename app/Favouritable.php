@@ -20,7 +20,7 @@ trait Favouritable
     //     return $this->favorites->count();
     // }
 
-    public function favorite($user)
+    public function handleFavorite($user)
     {
         $attributes = ['user_id' => $user];
 

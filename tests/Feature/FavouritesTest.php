@@ -50,19 +50,19 @@ class FavoritesTest extends TestCase
         $this->assertCount(0, $reply->favorites);
     }
 
-    /** @test */
-    public function an_authenticated_user_can_favour_item_only_once()
-    {
-        $this->signIn();
+    // this test is not eeded since logics changed
+    // public function an_authenticated_user_can_favour_item_only_once()
+    // {
+    //     $this->signIn();
 
-        $reply = factory(Reply::class)->create();
+    //     $reply = factory(Reply::class)->create();
 
-        try {
-            $this->post(action('FavoritesController@store', $reply));
-            $this->post(action('FavoritesController@store', $reply));
-        } catch (\Exception $e) {
-            $this->fail('One favorite only');
-        }
-        $this->assertCount(1, $reply->favorites);
-    }
+    //     try {
+    //         $this->post(action('FavoritesController@store', $reply));
+    //         $this->post(action('FavoritesController@store', $reply));
+    //     } catch (\Exception $e) {
+    //         $this->fail('One favorite only');
+    //     }
+    //     $this->assertCount(1, $reply->favorites);
+    // }
 }

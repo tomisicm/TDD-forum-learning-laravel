@@ -18,6 +18,6 @@ class FavoritesController extends Controller
     {
         $user = auth()->id();
 
-        return $reply->favorite($user);
+        return $reply->handleFavorite($user);
     }
 }
