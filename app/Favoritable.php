@@ -2,10 +2,10 @@
 
 namespace App;
 
-trait Favouritable
+trait Favoritable
 {
 
-    protected static function bootFavouritable()
+    protected static function bootFavoritable()
     {
         static::deleting(function ($model) {
             $model->favorites->each->delete();

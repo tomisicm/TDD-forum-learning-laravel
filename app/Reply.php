@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use RecordsActivity, Favouritable;
+    use RecordsActivity, Favoritable;
 
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
