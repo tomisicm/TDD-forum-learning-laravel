@@ -37,6 +37,20 @@ class FavoritesTest extends TestCase
     }
 
     /** @test */
+    public function an_authenticated_user_can_unfavorite_reply()
+    {
+        $this->signIn();
+
+        $reply = factory(Reply::class)->create();
+
+        $this->post(action('FavoritesController@store', $reply));
+
+        $this->post(action('FavoritesController@store', $reply));
+
+        $this->assertCount(0, $reply->favorites);
+    }
+
+    /** @test */
     public function an_authenticated_user_can_favour_item_only_once()
     {
         $this->signIn();

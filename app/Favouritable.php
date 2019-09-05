@@ -26,12 +26,14 @@ trait Favouritable
 
         if (!$this->isFavorited($user)) {
             return $this->favorites()->create($attributes);
+        } else {
+            return $this->favorites()->where(['user_id' => $user])->delete();
         }
     }
 
     public function isFavorited($user)
     {
-        // return $this->favorites()->where(['user_id' => $user])->exists();
-        return !!$this->favorites->where(['user_id' => $user])->count();
+        return $this->favorites()->where(['user_id' => $user])->exists();
+        // return !!$this->favorites->where(['user_id' => $user])->count();
     }
 }
