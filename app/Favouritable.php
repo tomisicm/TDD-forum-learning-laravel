@@ -27,7 +27,14 @@ trait Favouritable
         if (!$this->isFavorited($user)) {
             return $this->favorites()->create($attributes);
         } else {
-            return $this->favorites()->where(['user_id' => $user])->delete();
+            // EVENTS DO NOT FIRE ON QUERY 
+            // ENSURE THAT EVENTS FIRE ON MODEL
+            return $this->favorites()
+                ->where(['user_id' => $user])
+                ->get()
+                ->each(function ($favourite) {
+                    $favourite->delete();
+                });
         }
     }
 
