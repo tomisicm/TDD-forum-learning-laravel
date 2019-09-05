@@ -52,6 +52,18 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
+    public function activity_is_deleted_when_reply_is_deleted()
+    {
+        $this->signIn();
+        $reply = create(Reply::class);
+
+        $activity = Activity::latest()->first();
+
+        $this->assertEquals(2, Activity::count());
+        $this->assertEquals($activity->subject->id, $reply->id);
+    }
+
+    /** @test */
     public function user_has_activity_feed()
     {
         $this->signIn();
