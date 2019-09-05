@@ -32,9 +32,7 @@ trait Favouritable
             return $this->favorites()
                 ->where(['user_id' => $user])
                 ->get()
-                ->each(function ($favourite) {
-                    $favourite->delete();
-                });
+                ->each->delete();
         }
     }
 
