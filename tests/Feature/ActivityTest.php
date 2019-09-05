@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\User;
 use App\Activity;
 use App\Reply;
 use App\Thread;
@@ -54,13 +55,27 @@ class ActivityTest extends TestCase
     /** @test */
     public function activity_is_deleted_when_reply_is_deleted()
     {
-        $this->signIn();
-        $reply = create(Reply::class);
+        $this->signIn($user = factory(User::class)->create());
+        $reply = factory(Reply::class)->create([
+            'user_id' => $user->id
+        ]);
 
-        $activity = Activity::latest()->first();
+        $this->delete(action('RepliesController@destroy', $reply));
 
-        $this->assertEquals(2, Activity::count());
-        $this->assertEquals($activity->subject->id, $reply->id);
+        $this->assertEquals(1, Activity::count());
+    }
+
+    // TODO
+    /** @test */
+    public function favourites_are_deleted_when_reply_is_deleted()
+    {
+        // $this->signIn();
+        // $reply = create(Reply::class);
+
+        // $activity = Activity::latest()->first();
+
+        // $this->assertEquals(2, Activity::count());
+        // $this->assertEquals($activity->subject->id, $reply->id);
     }
 
     /** @test */
