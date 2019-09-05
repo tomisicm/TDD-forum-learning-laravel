@@ -70,7 +70,7 @@ class ParticipantInForum extends TestCase
         $reply = factory(Reply::class)->create();
 
         $this->delete(action('RepliesController@destroy', $reply))
-            ->assertStatus(204);
+            ->assertStatus(403);
 
         $this->assertDatabaseHas('replies', $reply->attributesToArray());
     }
@@ -90,5 +90,20 @@ class ParticipantInForum extends TestCase
             'id' => $reply->id,
             'body' => 'body changed'
         ]);
+    }
+
+    /** @test */
+    public function reply_cannot_be_updated_by_other_users()
+    {
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\Access\AuthorizationException');
+
+        $this->signIn();
+        $reply = factory(Reply::class)->create();
+
+        $this->delete(action('RepliesController@update', $reply))
+            ->assertStatus(403);
+
+        $this->assertDatabaseHas('replies', $reply->attributesToArray());
     }
 }
