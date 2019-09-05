@@ -49,8 +49,6 @@ class ParticipantInForum extends TestCase
     /** @test */
     public function reply_can_be_deleted_by_reply_owner()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn($user = factory(User::class)->create());
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id
@@ -75,5 +73,22 @@ class ParticipantInForum extends TestCase
             ->assertStatus(204);
 
         $this->assertDatabaseHas('replies', $reply->attributesToArray());
+    }
+
+    /** @test */
+    public function reply_can_be_updated_by_reply_creator()
+    {
+        $this->signIn($user = factory(User::class)->create());
+        $reply = factory(Reply::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->patch(action('RepliesController@update', $reply), ['body' => 'body changed'])
+            ->assertOk();
+
+        $this->assertDatabaseHas('replies', [
+            'id' => $reply->id,
+            'body' => 'body changed'
+        ]);
     }
 }

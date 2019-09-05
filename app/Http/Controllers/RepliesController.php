@@ -28,6 +28,23 @@ class RepliesController extends Controller
     }
 
     /**
+     * Store a newly created reply in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Reply $reply)
+    {
+        $attributes = [
+            'body' => request('body'),
+        ];
+
+        $reply->update($attributes);
+
+        return $reply;
+    }
+
+    /**
      * Delete a newly created reply in storage.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -11,6 +11,7 @@ Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 
 Route::post('/threads/{thread}/replies', 'RepliesController@store')->middleware('auth');
 Route::delete('/replies/{reply}', 'RepliesController@destroy')->middleware('auth');
+Route::patch('/replies/{reply}', 'RepliesController@update')->middleware('auth');
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middleware('auth');
 
 
