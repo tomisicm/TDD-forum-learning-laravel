@@ -13,6 +13,8 @@ class Reply extends Model
 
     protected $with = ['favorites', 'creator'];
 
+    protected $appends = ['isFavorited'];
+
     // TODO: counting
     // protected static function boot()
     // {
