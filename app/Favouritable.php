@@ -33,7 +33,7 @@ trait Favouritable
 
     public function isFavorited($user)
     {
-        return !!$this->favorites->where(['user_id' => $user])->count();
+        return $this->favorites()->where(['user_id' => $user])->exists();
     }
 
     public function getIsFavoritedAttribute($user)
