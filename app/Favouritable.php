@@ -8,7 +8,7 @@ trait Favouritable
     protected static function bootFavouritable()
     {
         static::deleting(function ($model) {
-            $model->favorites()->get()->each->delete();
+            $model->favorites->each->delete();
         });
     }
 
