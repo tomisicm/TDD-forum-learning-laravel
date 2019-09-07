@@ -82,7 +82,7 @@ class NotificationsTest extends TestCase
             'notifiable_id' => auth()->id()
         ]);
 
-        $userNotification = auth()->user()->refresh()->notifications()->first();
+        $userNotification = auth()->user()->refresh()->unreadNotifications()->first();
 
         $this->assertCount(1, auth()->user()->refresh()->notifications);
 
@@ -94,5 +94,23 @@ class NotificationsTest extends TestCase
             'notifiable_id' => auth()->id(),
             'read_at' => date('Y-m-d G:i:s')
         ]);
+    }
+
+    /** @test */
+    public function thread_subscribers_get_notifications()
+    {
+        $thread = create(Thread::class);
+        $this->signIn();
+
+        $thread->subscribe(auth()->id());
+
+        $thread->addReply(make(Reply::class, [
+            'thread_id' => $thread->id,
+            'user_id' => $thread->creator->id
+        ])->attributesToArray());
+
+        $resp = $this->getJson(action('UserNotificationsController@index'))->json();
+
+        $this->assertCount(1, $resp);
     }
 }

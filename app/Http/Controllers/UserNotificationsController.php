@@ -9,6 +9,16 @@ use App\Notifications\ThreadWasUpdated;
 class UserNotificationsController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return auth()->user()->unreadNotifications;
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Notifications\ThreadWasUpdated $notification
@@ -16,6 +26,6 @@ class UserNotificationsController extends Controller
      */
     public function destroy($notification)
     {
-        auth()->user()->notifications()->findOrFail($notification)->markAsRead();
+        auth()->user()->unreadNotifications()->findOrFail($notification)->markAsRead();
     }
 }
