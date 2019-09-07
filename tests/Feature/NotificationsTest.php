@@ -68,24 +68,9 @@ class NotificationsTest extends TestCase
     /** @test */
     public function user_can_markAsRead_notifications()
     {
-        $this->thread->subscribe(auth()->id());
-
-        $this->assertCount(0, auth()->user()->notifications);
-
-        $this->thread->addReply(make(Reply::class, [
-            'thread_id' => $this->thread->id,
-            'user_id' => $this->thread->creator->id
-        ])->attributesToArray());
-
-        $this->assertDatabaseHas('notifications', [
-            'type' => 'App\\Notifications\\ThreadWasUpdated',
-            'notifiable_type' => get_class(auth()->user()),
-            'notifiable_id' => auth()->id()
-        ]);
+        create(DatabaseNotification::class);
 
         $userNotification = auth()->user()->refresh()->unreadNotifications()->first();
-
-        $this->assertCount(1, auth()->user()->refresh()->notifications);
 
         $this->delete(action('UserNotificationsController@destroy', [$userNotification]));
 
