@@ -58,7 +58,7 @@ class ThreadController extends Controller
         // TODO: its better here than on the relation
         return $thread->load('creator')->load(['replies' => function ($query) {
             $query->withCount('favorites');
-        }]);
+        }])->append('isSubscribedTo');
     }
 
     /**

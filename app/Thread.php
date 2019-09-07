@@ -90,8 +90,7 @@ class Thread extends Model
 
     /**
      * subscriptions
-     *
-     * @return ThreadSubscription
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
      */
     public function subscriptions()
     {
@@ -100,15 +99,12 @@ class Thread extends Model
 
     /**
      * handleSubscribe - subscribe/unsubscribe user to the thread
-     *
      * @param  mixed $userId
-     *
      * @return void
      */
     public function handleSubscribe($userId = null)
     {
         if (!$this->hasSubscription($userId ?: auth()->id())) {
-
             return $this->subscribe($userId ?: auth()->id());
         }
         return $this->unsubscribe($userId ?: auth()->id());
@@ -116,9 +112,7 @@ class Thread extends Model
 
     /**
      * hasSubscription - is user subscribed to the thread
-     *
      * @param  mixed $userId
-     *
      * @return boolean
      */
     public function hasSubscription($userId)
@@ -141,5 +135,10 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
+    }
+
+    public function getIsSubscribedToAttribute()
+    {
+        $this->hasSubscription(auth()->id());
     }
 }
