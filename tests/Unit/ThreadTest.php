@@ -59,8 +59,8 @@ class ThreadTest extends TestCase
 
         $thread->subscribe();
 
-        $getThreadSubscriber = $thread->subscriptions()->where('user_id', auth()->id())->get();
+        $getSubscribedUser = $thread->subscriptions()->where('user_id', auth()->id())->get();
 
-        $this->assertCount(1, $getThreadSubscriber);
+        $this->assertCount(1, $getSubscribedUser);
     }
 }
