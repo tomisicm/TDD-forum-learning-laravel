@@ -2,9 +2,9 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thread extends Model
 {
@@ -70,11 +70,19 @@ class Thread extends Model
 
     /**
      * Add a reply to the thread
+     * Create notifications for thread subscribers
      * @param $reply
      */
     public function addReply($reply)
     {
-        $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        foreach ($this->subscriptions as $subscription) {
+
+            if ($subscription->user_id != $reply->user_id) {
+                $subscription->user->notify(new ThreadWasUpdated($this, $reply));
+            }
+        }
     }
 
     /**
