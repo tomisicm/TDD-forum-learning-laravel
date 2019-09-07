@@ -8,24 +8,31 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Thread;
 use App\Reply;
+use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->thread = create(Thread::class);
+
+        $this->signIn();
+    }
+
     /** @test */
     public function thread_subscribers_will_get_notification_when_somebody_replies_to_thread()
     {
-        $thread = create(Thread::class);
-        $this->signIn();
-
-        $thread->subscribe(auth()->id());
+        $this->thread->subscribe(auth()->id());
 
         $this->assertCount(0, auth()->user()->notifications);
 
-        $thread->addReply(make(Reply::class, [
-            'thread_id' => $thread->id,
-            'user_id' => $thread->creator->id
+        $this->thread->addReply(make(Reply::class, [
+            'thread_id' => $this->thread->id,
+            'user_id' => $this->thread->creator->id
         ])->attributesToArray());
 
         $this->assertDatabaseHas('notifications', [
@@ -40,15 +47,12 @@ class NotificationsTest extends TestCase
     /** @test */
     public function thread_subscribers_will_not_get_notification_when_self_replying_to_thread()
     {
-        $thread = create(Thread::class);
-        $this->signIn();
-
-        $thread->subscribe(auth()->id());
+        $this->thread->subscribe(auth()->id());
 
         $this->assertCount(0, auth()->user()->notifications);
 
-        $thread->addReply(make(Reply::class, [
-            'thread_id' => $thread->id,
+        $this->thread->addReply(make(Reply::class, [
+            'thread_id' => $this->thread->id,
             'user_id' => auth()->id()
         ])->attributesToArray());
 
@@ -64,16 +68,13 @@ class NotificationsTest extends TestCase
     /** @test */
     public function user_can_markAsRead_notifications()
     {
-        $thread = create(Thread::class);
-        $this->signIn();
-
-        $thread->subscribe(auth()->id());
+        $this->thread->subscribe(auth()->id());
 
         $this->assertCount(0, auth()->user()->notifications);
 
-        $thread->addReply(make(Reply::class, [
-            'thread_id' => $thread->id,
-            'user_id' => $thread->creator->id
+        $this->thread->addReply(make(Reply::class, [
+            'thread_id' => $this->thread->id,
+            'user_id' => $this->thread->creator->id
         ])->attributesToArray());
 
         $this->assertDatabaseHas('notifications', [
@@ -99,15 +100,7 @@ class NotificationsTest extends TestCase
     /** @test */
     public function thread_subscribers_get_notifications()
     {
-        $thread = create(Thread::class);
-        $this->signIn();
-
-        $thread->subscribe(auth()->id());
-
-        $thread->addReply(make(Reply::class, [
-            'thread_id' => $thread->id,
-            'user_id' => $thread->creator->id
-        ])->attributesToArray());
+        create(DatabaseNotification::class);
 
         $resp = $this->getJson(action('UserNotificationsController@index'))->json();
 
