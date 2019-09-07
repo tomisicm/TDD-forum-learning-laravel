@@ -18,7 +18,9 @@ Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsControlle
 
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middleware('auth');
 
-
 Route::get('/profile/{user}', 'ProfileController@show');
+
+Route::get('/profile/{user}/notifications', 'UserNotificationsController@index');
+Route::delete('/profile/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
 Auth::routes();
