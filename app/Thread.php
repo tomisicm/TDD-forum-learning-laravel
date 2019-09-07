@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thread extends Model
 {
@@ -85,5 +86,18 @@ class Thread extends Model
     public function scopeFilter($query, $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function subscribe()
+    {
+        $this->subscriptions()->create([
+            'thread_id' => $this->id,
+            'user_id' => auth()->id()
+        ]);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
     }
 }

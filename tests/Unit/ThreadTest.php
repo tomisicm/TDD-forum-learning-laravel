@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\User;
 use App\Thread;
 use App\Reply;
+use App\ThreadSubscription;
 
 class ThreadTest extends TestCase
 {
@@ -47,5 +48,19 @@ class ThreadTest extends TestCase
         $thread->add_reply(factory(Reply::class)->make()->toArray());
 
         $this->assertCount(1, $thread->replies);
+    }
+
+    /** @test */
+    public function thread_can_be_subscribed_to()
+    {
+        $thread = create(Thread::class);
+
+        $this->signIn();
+
+        $thread->subscribe();
+
+        $getThreadSubscriber = $thread->subscriptions()->where('user_id', auth()->id())->get();
+
+        $this->assertCount(1, $getThreadSubscriber);
     }
 }
