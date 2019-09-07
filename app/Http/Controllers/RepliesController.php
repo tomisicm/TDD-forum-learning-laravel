@@ -33,7 +33,7 @@ class RepliesController extends Controller
             'thread_id' => $thread->id
         ];
 
-        $thread->add_reply($attributes);
+        $thread->addReply($attributes);
 
         return $thread->replies;
     }

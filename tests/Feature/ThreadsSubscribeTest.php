@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use App\Thread;
+use App\Reply;
 use App\ThreadSubscription;
 
 class ThreadsSubscribeTest extends TestCase
@@ -45,6 +46,25 @@ class ThreadsSubscribeTest extends TestCase
         $this->assertDatabaseMissing('thread_subscriptions', [
             'thread_id' => $thread->id,
             'user_id' => auth()->id()
+        ]);
+    }
+
+    /** @test */
+    public function thread_subscribers_will_get_notification()
+    {
+        $thread = create(Thread::class);
+        $this->signIn();
+        $thread->subscribe(auth()->id());
+
+        $reply = make(Reply::class, [
+            'thread_id' => $thread->id,
+            'user_id' => auth()->id()
+        ]);
+
+        $thread->addReply($reply->attributesToArray());
+
+        $this->assertDatabaseHas('notifications', [
+            'id' => $thread->id
         ]);
     }
 }

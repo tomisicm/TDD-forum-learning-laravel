@@ -45,7 +45,7 @@ class ThreadTest extends TestCase
     {
         $thread = factory(Thread::class)->create();
 
-        $thread->add_reply(factory(Reply::class)->make()->toArray());
+        $thread->addReply(factory(Reply::class)->make()->toArray());
 
         $this->assertCount(1, $thread->replies);
     }
