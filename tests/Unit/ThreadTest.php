@@ -63,4 +63,16 @@ class ThreadTest extends TestCase
 
         $this->assertCount(1, $getSubscribedUser);
     }
+
+    /** @test */
+    public function thread_can_be_subscribed_to_by_given_userId()
+    {
+        $thread = create(Thread::class);
+
+        $thread->subscribe($userId = 1);
+
+        $getSubscribedUser = $thread->subscriptions()->where('user_id', $userId)->get();
+
+        $this->assertCount(1, $getSubscribedUser);
+    }
 }
