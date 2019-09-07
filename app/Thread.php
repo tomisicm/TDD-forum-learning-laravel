@@ -88,6 +88,46 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
+    /**
+     * subscriptions
+     *
+     * @return ThreadSubscription
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(ThreadSubscription::class);
+    }
+
+    /**
+     * handleSubscribe - subscribe/unsubscribe user to the thread
+     *
+     * @param  mixed $userId
+     *
+     * @return void
+     */
+    public function handleSubscribe($userId = null)
+    {
+        if (!$this->hasSubscription($userId ?: auth()->id())) {
+
+            return $this->subscribe($userId ?: auth()->id());
+        }
+        return $this->unsubscribe($userId ?: auth()->id());
+    }
+
+    /**
+     * hasSubscription - is user subscribed to the thread
+     *
+     * @param  mixed $userId
+     *
+     * @return boolean
+     */
+    public function hasSubscription($userId)
+    {
+        return $this->subscriptions()
+            ->where('user_id', $userId)
+            ->exists();
+    }
+
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
@@ -101,10 +141,5 @@ class Thread extends Model
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
-    }
-
-    public function subscriptions()
-    {
-        return $this->hasMany(ThreadSubscription::class);
     }
 }
