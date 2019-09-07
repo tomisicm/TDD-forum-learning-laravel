@@ -88,11 +88,11 @@ class Thread extends Model
         return $filters->apply($query);
     }
 
-    public function subscribe()
+    public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
             'thread_id' => $this->id,
-            'user_id' => auth()->id()
+            'user_id' => $userId ?: auth()->id()
         ]);
     }
 
