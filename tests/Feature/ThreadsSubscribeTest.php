@@ -29,4 +29,22 @@ class ThreadsSubscribeTest extends TestCase
             'user_id' => auth()->id()
         ]);
     }
+
+    /** @test */
+    public function a_user_can_unsubscribe_to_threads()
+    {
+        $thread = create(Thread::class);
+
+        $this->signIn();
+
+        $thread->subscribe(auth()->id());
+
+        $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
+            ->assertOk();
+
+        $this->assertDatabaseMissing('thread_subscriptions', [
+            'thread_id' => $thread->id,
+            'user_id' => auth()->id()
+        ]);
+    }
 }
