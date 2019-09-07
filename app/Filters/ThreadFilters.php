@@ -9,7 +9,7 @@ use App\User;
 class ThreadFilters extends Filters
 {
 
-    protected $filters = ['by', 'popular'];
+    protected $filters = ['by', 'popular', 'unreplied'];
 
 
     /**
@@ -36,5 +36,10 @@ class ThreadFilters extends Filters
         $this->builder->getQuery()->orders = [];
 
         return $this->builder->orderBy('replies_count', 'desc');
+    }
+
+    protected function unreplied()
+    {
+        return $this->builder->doesntHave('replies');
     }
 }

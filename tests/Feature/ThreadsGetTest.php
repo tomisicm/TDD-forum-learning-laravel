@@ -116,4 +116,16 @@ class ThreadsGetTest extends TestCase
 
         $this->assertEquals([2, 0, 0, 0], array_column($response, 'replies_count'));
     }
+
+    /** @test */
+    public function a_user_can_filter_threads_without_replies()
+    {
+        $this->signIn();
+
+        create(Reply::class, ['thread_id' => create(Thread::class)->id]);
+
+        $response = $this->getJson(action('ThreadController@index', ['?unreplied=0']))->json();
+
+        $this->assertCount(Thread::count() - 1, $response);
+    }
 }
