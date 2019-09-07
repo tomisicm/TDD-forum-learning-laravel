@@ -21,7 +21,8 @@ class ThreadsSubscribeTest extends TestCase
 
         $this->signIn();
 
-        $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]));
+        $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
+            ->assertOk();
 
         $this->assertDatabaseHas('thread_subscriptions', [
             'thread_id' => $thread->id,
