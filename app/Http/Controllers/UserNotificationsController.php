@@ -14,7 +14,7 @@ class UserNotificationsController extends Controller
      * @param  \App\Notifications\ThreadWasUpdated $notification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user, $notification)
+    public function destroy($notification)
     {
         auth()->user()->notifications()->findOrFail($notification)->markAsRead();
     }

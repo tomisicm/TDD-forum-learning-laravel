@@ -20,7 +20,7 @@ Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middlewa
 
 Route::get('/profile/{user}', 'ProfileController@show');
 
-Route::get('/profile/{user}/notifications', 'UserNotificationsController@index');
-Route::delete('/profile/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
+Route::get('/notifications', 'UserNotificationsController@index');
+Route::delete('/notifications/{notification}', 'UserNotificationsController@destroy');
 
 Auth::routes();

@@ -86,7 +86,7 @@ class NotificationsTest extends TestCase
 
         $this->assertCount(1, auth()->user()->refresh()->notifications);
 
-        $this->delete(action('UserNotificationsController@destroy', [auth()->user()->name, $userNotification]));
+        $this->delete(action('UserNotificationsController@destroy', [$userNotification]));
 
         $this->assertDatabaseHas('notifications', [
             'type' => 'App\\Notifications\\ThreadWasUpdated',
