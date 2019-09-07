@@ -35,13 +35,13 @@ class NotificationsTest extends TestCase
             'user_id' => $this->thread->creator->id
         ])->attributesToArray());
 
+        $this->assertCount(1, auth()->user()->fresh()->notifications);
+
         $this->assertDatabaseHas('notifications', [
             'type' => 'App\\Notifications\\ThreadWasUpdated',
             'notifiable_type' => get_class(auth()->user()),
             'notifiable_id' => auth()->id()
         ]);
-
-        $this->assertCount(1, auth()->user()->fresh()->notifications);
     }
 
     /** @test */
