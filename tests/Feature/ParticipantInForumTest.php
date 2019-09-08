@@ -17,7 +17,6 @@ class ParticipantInForum extends TestCase
     /** @test */
     public function an_unauthenticated_user_cannot_post_reply_in_a_thread()
     {
-
         $this->withoutExceptionHandling()
             ->expectException('Illuminate\Auth\AuthenticationException');
 
@@ -33,12 +32,13 @@ class ParticipantInForum extends TestCase
     /** @test */
     public function an_authenticated_user_can_post_reply_in_a_thread()
     {
-        $this->withoutExceptionHandling();
+        $this->signIn();
 
-        $this->be($user = factory(User::class)->create());
         $thread = factory(Thread::class)->create();
 
-        $reply = factory(Reply::class)->make();
+        $reply = factory(Reply::class)->make([
+            'user_id' => auth()->id()
+        ]);
 
 
         $this->post(action('RepliesController@store', $thread), $reply->toArray())
