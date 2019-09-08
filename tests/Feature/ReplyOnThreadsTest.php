@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Reply;
 use App\Thread;
 use App\User;
+use Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -104,5 +105,23 @@ class ReplyOnThreads extends TestCase
             ->assertStatus(403);
 
         $this->assertDatabaseHas('replies', $reply->attributesToArray());
+    }
+
+    /** @test */
+    public function reply_cannot_contain_spam()
+    {
+        $this->signIn()->withoutExceptionHandling()
+            ->expectException(\Exception::class);
+
+        $thread = factory(Thread::class)->create();
+
+        $reply = factory(Reply::class)->make([
+            'body' => 'SPAM'
+        ]);
+
+        $this->post(action('RepliesController@store', $thread), $reply->toArray())
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('replies', $reply->attributesToArray());
     }
 }
