@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Inspections;
 
 class Spam
 {
@@ -31,7 +31,7 @@ class Spam
         }
     }
 
-    protected function detectRepeatingCharacters($body) 
+    protected function detectRepeatingCharacters($body)
     {
         if (preg_match('/(.)\\1{4,}/', $body)) {
             throw new \Exception('Reply contains spam!');
