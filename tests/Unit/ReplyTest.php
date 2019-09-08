@@ -36,7 +36,7 @@ class ReplyTest extends TestCase
     {
         $reply = factory(Reply::class)->create();
 
-        $this->assertTrue($reply->wasPublishedAgo(Carbon::now()->subMinute()));
+        $this->assertTrue($reply->wasPublishedAgo());
 
         $reply->created_at = Carbon::now()->subMonth();
 
