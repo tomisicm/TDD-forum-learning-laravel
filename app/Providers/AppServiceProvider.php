@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
     }
 }

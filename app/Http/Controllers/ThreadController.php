@@ -33,9 +33,9 @@ class ThreadController extends Controller
      */
     public function store(Request $request, Channel $channel)
     {
-        $attributes = $this->validate($request, [
+        $attributes = request()->validate([
             'title' => 'required|min:3',
-            'body' => 'required|max:512'
+            'body' => 'required|max:512|spamfree'
         ]);
         $attributes['user_id'] = auth()->id();
         $attributes['channel_id'] = $channel->id;
