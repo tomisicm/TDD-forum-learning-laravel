@@ -21,9 +21,11 @@ class RepliesController extends Controller
     }
 
     /**
-     * Store a newly created reply in storage.
+     * Store a newly created reply in storage, if reply is valid.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Thread  $thread
+     * @param  App\Inspections\Spam  $spam
+     * 
      * @return \Illuminate\Http\Response
      */
     public function store(Thread $thread, Spam $spam)

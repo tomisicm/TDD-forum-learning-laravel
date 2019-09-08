@@ -2,8 +2,17 @@
 
 namespace App\Inspections;
 
+use App\Inspections\InvalidKeywords;
+use App\Inspections\RepeatingCharacters;
+
 class Spam
 {
+
+    protected $inspections = [
+        InvalidKeywords::class,
+        RepeatingCharacters::class
+    ];
+
     /**
      * detect - Throw exception if there is spam, else false
      * @param  String $body
@@ -11,30 +20,10 @@ class Spam
      */
     public function detect($body)
     {
-        $this->detectInvalidKeywords($body);
-        $this->detectRepeatingCharacters($body);
+        foreach ($this->inspections as $inspection) {
+            app($inspection)->detect($body);
+        }
 
         return false;
-    }
-
-    protected function detectInvalidKeywords($body)
-    {
-        $invalidKeywords = [
-            'ITS SPAM'
-        ];
-
-        foreach ($invalidKeywords as $keyword) {
-
-            if (stripos($body, $keyword) !== false) {
-                throw new \Exception('Reply contains spam!');
-            }
-        }
-    }
-
-    protected function detectRepeatingCharacters($body)
-    {
-        if (preg_match('/(.)\\1{4,}/', $body)) {
-            throw new \Exception('Reply contains spam!');
-        }
     }
 }
