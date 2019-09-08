@@ -38,8 +38,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * getRouteKeyName - Route key name 
-     *
+     * getRouteKeyName - Route key name
      * @return string
      */
     public function getRouteKeyName()
@@ -47,13 +46,30 @@ class User extends Authenticatable
         return 'name';
     }
 
+    /**
+     * threads - relation with \App\Thread
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function threads()
     {
         return $this->hasMany(Thread::class)->latest();
     }
 
+    /**
+     * activity - relation with \App\Activity
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    /**
+     * latestReply - relation with \App\Reply
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
+    public function latestReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
     }
 }

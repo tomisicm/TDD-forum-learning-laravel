@@ -11,6 +11,18 @@ class ReplyPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can create the reply.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Reply  $reply
+     * @return mixed
+     */
+    public function create(User $user, Reply $reply)
+    {
+        return $reply->creator->id === $user->id;
+    }
+
+    /**
      * Determine whether the user can update the reply.
      *
      * @param  \App\User  $user
