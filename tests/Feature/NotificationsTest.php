@@ -83,7 +83,7 @@ class NotificationsTest extends TestCase
     }
 
     /** @test */
-    public function thread_subscribers_get_notifications()
+    public function thread_subscribers_fetch_notifications()
     {
         create(DatabaseNotification::class);
 
