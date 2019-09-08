@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class ParticipantInForum extends TestCase
+class ReplyOnThreads extends TestCase
 {
     use RefreshDatabase;
 
