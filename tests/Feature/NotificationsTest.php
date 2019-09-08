@@ -32,7 +32,7 @@ class NotificationsTest extends TestCase
 
         $this->thread->addReply(make(Reply::class, [
             'thread_id' => $this->thread->id,
-            'user_id' => $this->thread->creator->id
+            'user_id' => $this->thread->user_id
         ])->attributesToArray());
 
         $this->assertCount(1, auth()->user()->fresh()->notifications);
