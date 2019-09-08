@@ -63,10 +63,9 @@ class ParticipantInForum extends TestCase
     /** @test */
     public function reply_cannot_be_deleted_by_other_users()
     {
-        $this->withoutExceptionHandling()
+        $this->signIn()->withoutExceptionHandling()
             ->expectException('Illuminate\Auth\Access\AuthorizationException');
 
-        $this->signIn();
         $reply = factory(Reply::class)->create();
 
         $this->delete(action('RepliesController@destroy', $reply))
@@ -79,6 +78,7 @@ class ParticipantInForum extends TestCase
     public function reply_can_be_updated_by_reply_creator()
     {
         $this->signIn($user = factory(User::class)->create());
+
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id
         ]);
@@ -95,10 +95,9 @@ class ParticipantInForum extends TestCase
     /** @test */
     public function reply_cannot_be_updated_by_other_users()
     {
-        $this->withoutExceptionHandling()
+        $this->signIn()->withoutExceptionHandling()
             ->expectException('Illuminate\Auth\Access\AuthorizationException');
 
-        $this->signIn();
         $reply = factory(Reply::class)->create();
 
         $this->delete(action('RepliesController@update', $reply))
