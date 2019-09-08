@@ -80,6 +80,8 @@ class Thread extends Model
         $reply = $this->replies()->create($reply);
 
         event(new ThreadWasUpdated($this, $reply));
+
+        return $reply;
     }
 
     /**
