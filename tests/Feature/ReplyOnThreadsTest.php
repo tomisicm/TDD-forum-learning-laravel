@@ -116,7 +116,7 @@ class ReplyOnThreads extends TestCase
         $thread = factory(Thread::class)->create();
 
         $reply = factory(Reply::class)->make([
-            'body' => 'SPAM'
+            'body' => 'ITS SPAM'
         ]);
 
         $this->post(action('RepliesController@store', $thread), $reply->toArray())

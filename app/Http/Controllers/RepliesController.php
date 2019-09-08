@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Reply;
 use App\Channel;
+use App\Spam;
 use Illuminate\Http\Request;
 
 class RepliesController extends Controller
@@ -27,6 +28,8 @@ class RepliesController extends Controller
      */
     public function store(Thread $thread, Spam $spam)
     {
+        $spam->detect(request('body'));
+
         $attributes = [
             'body' => request('body'),
             'user_id' => auth()->id(),
