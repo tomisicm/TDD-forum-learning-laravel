@@ -12,6 +12,7 @@ class Spam
     public function detect($body)
     {
         $this->detectInvalidKeywords($body);
+        $this->detectRepeatingCharacters($body);
 
         return false;
     }
@@ -27,6 +28,13 @@ class Spam
             if (stripos($body, $keyword) !== false) {
                 throw new \Exception('Reply contains spam!');
             }
+        }
+    }
+
+    protected function detectRepeatingCharacters($body) 
+    {
+        if (preg_match('/(.)\\1{4,}/', $body)) {
+            throw new \Exception('Reply contains spam!');
         }
     }
 }

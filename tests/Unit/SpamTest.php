@@ -10,7 +10,7 @@ use App\Spam;
 class SpamTest extends TestCase
 {
     /** @test */
-    public function it_validates_spam()
+    public function it_validates_spam_and_returns_false_if_no_spam_detected()
     {
         $spam = new Spam();
 
@@ -18,12 +18,22 @@ class SpamTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_spam_and_throws_error()
+    public function it_validates_invalid_keywords()
     {
         $this->expectException(\Exception::class);
 
         $spam = new Spam();
 
         $this->assertFalse($spam->detect('ITS SPAM'));
+    }
+
+    /** @test */
+    public function it_validates_invalid_repeating_characters()
+    {
+        $this->expectException(\Exception::class);
+
+        $spam = new Spam();
+
+        $this->assertFalse($spam->detect('HELLO AAAAAAAAAAAAAAAAAAAAAAA'));
     }
 }
