@@ -78,7 +78,7 @@ class NotificationsTest extends TestCase
             'type' => 'App\\Notifications\\ThreadWasUpdated',
             'notifiable_type' => get_class(auth()->user()),
             'notifiable_id' => auth()->id(),
-            'read_at' => date('Y-m-d G:i:s')
+            'read_at' => date('Y-m-d H:i:s')
         ]);
     }
 
