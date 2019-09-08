@@ -19,7 +19,11 @@ class ReplyPolicy
      */
     public function create(User $user, Reply $reply)
     {
-        return $reply->creator->id === $user->id;
+        $latestReply =  $user->fresh()->latestReply;
+
+        if (!$latestReply) return true;
+
+        return !$latestReply->wasPublishedAgo();
     }
 
     /**

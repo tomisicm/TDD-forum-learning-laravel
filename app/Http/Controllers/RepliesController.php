@@ -29,6 +29,10 @@ class RepliesController extends Controller
      */
     public function store(Thread $thread)
     {
+
+        // TODO: custom response
+        $this->authorize('create', new Reply);
+
         $this->validate(request(), [
             'body' => 'required|spamfree'
         ]);

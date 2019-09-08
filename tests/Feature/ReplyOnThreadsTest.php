@@ -124,4 +124,20 @@ class ReplyOnThreads extends TestCase
 
         $this->assertDatabaseMissing('replies', $reply->attributesToArray());
     }
+
+    /** @test */
+    public function an_authenticated_user_can_post_reply_once_per_minute()
+    {
+        $this->signIn();
+
+        $reply = factory(Reply::class)->create([
+            'user_id' => auth()->id()
+        ]);
+        $this->assertCount(1, Reply::all());
+
+        $this->post(action('RepliesController@store', $reply->thread), $reply->toArray())
+            ->assertStatus(403);
+
+        $this->assertCount(1, Reply::all());
+    }
 }
