@@ -141,19 +141,33 @@ class Thread extends Model
             ->exists();
     }
 
+    /**
+     * subscribe
+     * @param  mixed  $userId
+     * @return  \App\Thread
+     */
     public function subscribe($userId = null)
     {
         $this->subscriptions()->create([
             'thread_id' => $this->id,
             'user_id' => $userId ?: auth()->id()
         ]);
+
+        return $this;
     }
 
+    /**
+     * unsubscribe
+     * @param  mixed  $userId
+     * @return  \App\Thread
+     */
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()
             ->where('user_id', $userId ?: auth()->id())
             ->delete();
+
+        return $this;
     }
 
     public function getIsSubscribedToAttribute()
