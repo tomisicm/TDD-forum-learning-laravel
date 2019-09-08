@@ -107,6 +107,18 @@ class Thread extends Model
      * @param  mixed $userId
      * @return void
      */
+    public function notifySubscribers($reply)
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each->notify($reply);
+    }
+
+    /**
+     * handleSubscribe - subscribe/unsubscribe user to the thread
+     * @param  mixed $userId
+     * @return void
+     */
     public function handleSubscribe($userId = null)
     {
         if (!$this->hasSubscription($userId ?: auth()->id())) {

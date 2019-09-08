@@ -17,9 +17,11 @@ class NotifyThreadSubscribers
      */
     public function handle(ThreadWasUpdated $event)
     {
-        $event->thread->subscriptions
-            ->where('user_id', '!=', $event->reply->user_id)
-            ->each
-            ->notify($event->reply);
+        $event->thread->notifySubscribers($event->reply);
+
+        // $event->thread->subscriptions
+        //     ->where('user_id', '!=', $event->reply->user_id)
+        //     ->each
+        //     ->notify($event->reply);
     }
 }
