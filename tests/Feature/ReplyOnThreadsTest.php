@@ -136,7 +136,7 @@ class ReplyOnThreads extends TestCase
         $this->assertCount(1, Reply::all());
 
         $this->post(action('RepliesController@store', $reply->thread), $reply->toArray())
-            ->assertStatus(403);
+            ->assertStatus(429);
 
         $this->assertCount(1, Reply::all());
     }
