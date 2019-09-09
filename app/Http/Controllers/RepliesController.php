@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Reply;
 use App\Channel;
+use App\Http\Requests\CreateReplyRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -28,18 +28,8 @@ class RepliesController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function store(Thread $thread)
+    public function store(Thread $thread, CreateReplyRequest $request)
     {
-
-        // TODO: custom response
-        if (Gate::denies('create', new Reply)) {
-            return response([], 403);
-        }
-
-        $this->validate(request(), [
-            'body' => 'required|spamfree'
-        ]);
-
         $attributes = [
             'body' => request('body'),
             'user_id' => auth()->id(),
