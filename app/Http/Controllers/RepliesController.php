@@ -24,7 +24,7 @@ class RepliesController extends Controller
      * Store a newly created reply in storage, if reply is valid.
      *
      * @param  App\Thread  $thread
-     * @param  App\Inspections\Spam  $spam
+     * @param  App\Http\Requests\CreateReplyRequest  $request
      * 
      * @return \Illuminate\Http\Response
      */
