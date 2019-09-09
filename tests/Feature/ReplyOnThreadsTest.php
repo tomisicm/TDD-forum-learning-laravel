@@ -119,6 +119,7 @@ class ReplyOnThreads extends TestCase
             'body' => 'ITS SPAM'
         ]);
 
+        // TODO: return 429 status code
         $this->post(action('RepliesController@store', $thread), $reply->toArray())
             ->assertStatus(403);
 
