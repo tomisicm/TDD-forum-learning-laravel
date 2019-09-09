@@ -6,6 +6,7 @@ use App\Thread;
 use App\Reply;
 use App\Channel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -31,7 +32,9 @@ class RepliesController extends Controller
     {
 
         // TODO: custom response
-        $this->authorize('create', new Reply);
+        if (Gate::denies('create', new Reply)) {
+            return response([], 403);
+        }
 
         $this->validate(request(), [
             'body' => 'required|spamfree'
