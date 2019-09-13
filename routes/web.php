@@ -23,4 +23,14 @@ Route::get('/profile/{user}', 'ProfileController@show');
 Route::get('/notifications', 'UserNotificationsController@index');
 Route::delete('/notifications/{notification}', 'UserNotificationsController@destroy');
 
-Auth::routes();
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout');
+
+// Registration Routes...
+Route::post('register', 'Auth\RegisterController@register');
+
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
