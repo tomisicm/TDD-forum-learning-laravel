@@ -1,7 +1,8 @@
 <?php
 
 
-Route::prefix('/api')->group(
+Route::group(
+    ['prefix' => '/api'],
     function () {
         Route::get('/channels', 'ChannelController@index');
 
