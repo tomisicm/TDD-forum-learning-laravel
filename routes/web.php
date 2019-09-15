@@ -2,7 +2,10 @@
 
 
 Route::group(
-    ['prefix' => '/api'],
+    [
+        'middleware' => 'jwt.auth',
+        'prefix' => '/api'
+    ],
     function () {
         Route::get('/channels', 'ChannelController@index');
 
@@ -30,8 +33,8 @@ Route::group(
 );
 
 
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout');
+Route::post('login', 'Auth\APILoginController@login');
+// Route::post('logout', 'Auth\LoginController@logout');
 
 // Registration Routes...
 Route::post('register', 'Auth\RegisterController@register');
