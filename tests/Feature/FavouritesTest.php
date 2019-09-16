@@ -3,13 +3,17 @@
 namespace Tests\Feature;
 
 use App\Reply;
+use App\User;
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
+
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+
 class FavoritesTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
     /** @test */
     public function an_unauthenticated_user_cannot_favour_anything()
@@ -19,15 +23,13 @@ class FavoritesTest extends TestCase
 
         $reply = factory(Reply::class)->create();
 
-        $this->post(action('FavoritesController@store', $reply));
+        $this->post(action('FavoritesController@store', $reply))->assertStatus(303);
     }
 
     /** @test */
     public function an_authenticated_user_can_favour_any_reply()
     {
-        $this->withoutExceptionHandling();
-
-        $this->signIn();
+        $this->loginAs(create(User::class));
 
         $reply = factory(Reply::class)->create();
 
@@ -39,30 +41,16 @@ class FavoritesTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_unfavorite_reply()
     {
-        $this->signIn();
+        $this->withoutExceptionHandling();
+
+        $this->loginAs(create(User::class));
 
         $reply = factory(Reply::class)->create();
 
         $this->post(action('FavoritesController@store', $reply));
 
-        $this->post(action('FavoritesController@store', $reply));
+        $this->post(action('FavoritesController@store', $reply))->assertOk();
 
         $this->assertCount(0, $reply->favorites);
     }
-
-    // this test is not eeded since logics changed
-    // public function an_authenticated_user_can_favour_item_only_once()
-    // {
-    //     $this->signIn();
-
-    //     $reply = factory(Reply::class)->create();
-
-    //     try {
-    //         $this->post(action('FavoritesController@store', $reply));
-    //         $this->post(action('FavoritesController@store', $reply));
-    //     } catch (\Exception $e) {
-    //         $this->fail('One favorite only');
-    //     }
-    //     $this->assertCount(1, $reply->favorites);
-    // }
 }
