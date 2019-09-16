@@ -2,25 +2,26 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use App\User;
 use App\Thread;
 use App\Reply;
 use App\ThreadSubscription;
 
 class ThreadsSubscribeTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
     /** @test */
     public function a_user_can_subscribe_to_threads()
     {
         $thread = create(Thread::class);
 
-        $this->signIn();
+        $this->loginAs(create(User::class));
 
         $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
             ->assertOk();
@@ -36,9 +37,9 @@ class ThreadsSubscribeTest extends TestCase
     {
         $thread = create(Thread::class);
 
-        $this->signIn();
+        $this->loginAs($user = create(User::class));
 
-        $thread->subscribe(auth()->id());
+        $thread->subscribe($user->id);
 
         $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
             ->assertOk();
