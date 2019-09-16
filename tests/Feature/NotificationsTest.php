@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -12,7 +13,7 @@ use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationsTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
     public function setUp(): void
     {
@@ -68,6 +69,8 @@ class NotificationsTest extends TestCase
     /** @test */
     public function user_can_markAsRead_notifications()
     {
+        $this->loginAs(auth()->user());
+
         create(DatabaseNotification::class);
 
         $userNotification = auth()->user()->refresh()->unreadNotifications()->first();

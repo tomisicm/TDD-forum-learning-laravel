@@ -19,7 +19,7 @@ class FavoritesTest extends TestCase
     public function an_unauthenticated_user_cannot_favour_anything()
     {
         $this->withoutExceptionHandling()
-            ->expectException('Illuminate\Auth\AuthenticationException');
+            ->expectException('Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException');
 
         $reply = factory(Reply::class)->create();
 
