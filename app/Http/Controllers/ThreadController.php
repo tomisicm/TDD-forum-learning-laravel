@@ -40,9 +40,7 @@ class ThreadController extends Controller
         $attributes['user_id'] = auth()->id();
         $attributes['channel_id'] = $channel->id;
 
-        $thread = Thread::create($attributes);
-
-        return $thread;
+        return Thread::create($attributes);
     }
 
     /**

@@ -8,24 +8,26 @@ use App\User;
 use App\Thread;
 
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
+
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ThreadsCreateTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
 
     /** @test */
     public function an_unauthenticated_user_cannot_post()
     {
         $this->withoutExceptionHandling()
-            ->expectException('Illuminate\Auth\AuthenticationException');
+            ->expectException('Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException');
 
         $thread = factory(Thread::class)->make();
 
-        $this->post(action('ThreadController@store', $thread->channel->id), $thread->attributesToArray());
+        $this->post(action('ThreadController@store', $thread->channel->name), $thread->attributesToArray());
 
         $this->assertDatabaseMissing('threads', $thread->attributesToArray());
     }
@@ -34,7 +36,7 @@ class ThreadsCreateTest extends TestCase
     public function authenticated_user_can_create_thread()
     {
 
-        $this->signIn($user = factory(User::class)->create());
+        $this->loginAs($user = factory(User::class)->create());
 
         $thread = factory(Thread::class)->make([
             'user_id' => $user->id
@@ -55,9 +57,12 @@ class ThreadsCreateTest extends TestCase
     /** @test */
     public function an_unauthorized_user_cannot_delete_thread()
     {
-        $thread = create(Thread::class);
+        $this->withoutExceptionHandling()
+            ->expectException('Illuminate\Auth\Access\AuthorizationException');
 
-        $this->signIn();
+        $this->loginAs(create(User::class));
+
+        $thread = create(Thread::class);
 
         $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
             ->assertStatus(403);
@@ -70,7 +75,7 @@ class ThreadsCreateTest extends TestCase
     {
         $thread = create(Thread::class);
 
-        $this->signIn($thread->creator);
+        $this->loginAs($thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
             ->assertStatus(204);
@@ -85,7 +90,7 @@ class ThreadsCreateTest extends TestCase
         $threadActivity = $reply->thread->activity->first()->attributesToArray();
         $replyActivity = $reply->activity->first()->attributesToArray();
 
-        $this->signIn($reply->thread->creator);
+        $this->loginAs($reply->thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
@@ -107,8 +112,7 @@ class ThreadsCreateTest extends TestCase
     {
         $reply = create(Reply::class);
 
-        $this->signIn($reply->thread->creator);
-
+        $this->loginAs($reply->thread->creator);
 
         $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
             ->assertStatus(204);
