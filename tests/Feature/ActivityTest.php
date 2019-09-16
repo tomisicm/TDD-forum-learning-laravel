@@ -8,12 +8,14 @@ use App\Favorite;
 use App\Reply;
 use App\Thread;
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
+
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ActivityTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
     /** @test */
     public function activity_is_recorded_when_thread_is_created()
@@ -37,15 +39,14 @@ class ActivityTest extends TestCase
     /** @test */
     public function activity_is_recorded_when_reply_is_created()
     {
-        $this->signIn();
         $reply = create(Reply::class);
 
-        // $this->assertDatabaseHas('activities', [
-        //     'user_id' => $reply->user->id,
-        //     'type' => strtolower((new \ReflectionClass($reply))->getShortname()) . '_created',
-        //     'subject_id' => $reply->id,
-        //     'subject_type' => get_class($reply)
-        // ]);
+        $this->assertDatabaseHas('activities', [
+            'user_id' => $reply->creator->id,
+            'type' => strtolower((new \ReflectionClass($reply))->getShortname()) . '_created',
+            'subject_id' => $reply->id,
+            'subject_type' => get_class($reply)
+        ]);
 
         $activity = Activity::latest()->first();
 
@@ -56,7 +57,7 @@ class ActivityTest extends TestCase
     /** @test */
     public function activity_is_deleted_when_reply_is_deleted()
     {
-        $this->signIn($user = factory(User::class)->create());
+        $this->loginAs($user = factory(User::class)->create());
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id
         ]);
@@ -70,13 +71,15 @@ class ActivityTest extends TestCase
     /** @test */
     public function favourites_are_deleted_when_reply_is_deleted()
     {
-        $this->signIn($user = factory(User::class)->create());
+        $this->loginAs($user = factory(User::class)->create());
         $reply = factory(Reply::class)->create([
             'user_id' => $user->id
         ]);
 
         $this->post(action('FavoritesController@store', $reply));
-        $this->delete(action('RepliesController@destroy', $reply));
+
+        $this->delete(action('RepliesController@destroy', $reply))
+            ->assertStatus(204);
 
         $this->assertCount(0, Favorite::all());
     }
@@ -84,15 +87,15 @@ class ActivityTest extends TestCase
     /** @test */
     public function user_has_activity_feed()
     {
-        $this->signIn();
+        $this->loginAs($user = factory(User::class)->create());
         $reply = create(Reply::class);
 
-        // $this->assertDatabaseHas('activities', [
-        //     'user_id' => $reply->user->id,
-        //     'type' => strtolower((new \ReflectionClass($reply))->getShortname()) . '_created',
-        //     'subject_id' => $reply->id,
-        //     'subject_type' => get_class($reply)
-        // ]);
+        $this->assertDatabaseHas('activities', [
+            'user_id' => $reply->creator->id,
+            'type' => strtolower((new \ReflectionClass($reply))->getShortname()) . '_created',
+            'subject_id' => $reply->id,
+            'subject_type' => get_class($reply)
+        ]);
 
         $activity = Activity::latest()->first();
 

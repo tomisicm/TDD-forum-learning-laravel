@@ -9,6 +9,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    // TODO: figure out actingAs with JWT, for now unnecessary
     public function signIn($user = null)
     {
         $user = $user ?: create(User::class);
