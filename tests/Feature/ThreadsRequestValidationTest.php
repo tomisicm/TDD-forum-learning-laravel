@@ -4,19 +4,21 @@ namespace Tests\Feature;
 
 use App\User;
 use App\Thread;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+
 use Tests\TestCase;
+use Tests\Traits\AttachJwtToken;
+
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ThreadsRequestValidationTests extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, AttachJwtToken;
 
     /** @test */
     public function thread_requires_title_body_channelId()
     {
-        $this->signIn(factory(User::class)->create());
+        $this->loginAs(factory(User::class)->create());
 
         $thread = factory(Thread::class)->make([
             'title' => null,

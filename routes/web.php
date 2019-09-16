@@ -3,8 +3,7 @@
 
 Route::get('/channels', 'ChannelController@index');
 
-
-Route::group(['prefix' => '/api'], function () {
+Route::group(['prefix' => 'api'], function () {
     Route::get('/threads', 'ThreadController@index');
     Route::get('/threads/{channel}', 'ThreadController@index');
     Route::post('/threads/{channel}', 'ThreadController@store')->middleware('jwt.auth');
@@ -12,7 +11,9 @@ Route::group(['prefix' => '/api'], function () {
     Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 });
 
-
+Route::group(['prefix' => '/api'], function () {
+    Route::get('/profile/{user}', 'ProfileController@show');
+});
 
 
 Route::group(
@@ -21,17 +22,16 @@ Route::group(
         'prefix' => '/api'
     ],
     function () {
-
         Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
-        Route::post('/threads/{thread}/replies', 'RepliesController@store')->middleware('auth');
-        Route::delete('/replies/{reply}', 'RepliesController@destroy')->middleware('auth');
-        Route::patch('/replies/{reply}', 'RepliesController@update')->middleware('auth');
+        Route::post('/threads/{thread}/replies', 'RepliesController@store');
+        Route::delete('/replies/{reply}', 'RepliesController@destroy');
+        Route::patch('/replies/{reply}', 'RepliesController@update');
 
-        Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('auth');
+        Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsController@store');
 
-        Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middleware('auth');
+        Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 
-        Route::get('/profile/{user}', 'ProfileController@show');
+
 
         Route::get('/notifications', 'UserNotificationsController@index');
         Route::delete('/notifications/{notification}', 'UserNotificationsController@destroy');
