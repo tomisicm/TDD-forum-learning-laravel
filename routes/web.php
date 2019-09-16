@@ -11,10 +11,25 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
 });
 
-Route::group(['prefix' => '/api'], function () {
+Route::group(['prefix' => 'api'], function () {
     Route::get('/profile/{user}', 'ProfileController@show');
 });
 
+Route::group(['prefix' => 'api'], function () {
+    Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
+    Route::post('/threads/{thread}/replies', 'RepliesController@store')->middleware('jwt.auth');
+    Route::delete('/replies/{reply}', 'RepliesController@destroy')->middleware('jwt.auth');
+    Route::patch('/replies/{reply}', 'RepliesController@update')->middleware('jwt.auth');
+
+    Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
+
+    Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middleware('jwt.auth');
+});
+
+Route::group(['prefix' => 'api'], function () {
+    Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
+    Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->middleware('jwt.auth');
+});
 
 Route::group(
     [
@@ -22,22 +37,10 @@ Route::group(
         'prefix' => '/api'
     ],
     function () {
-        Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
-        Route::post('/threads/{thread}/replies', 'RepliesController@store');
-        Route::delete('/replies/{reply}', 'RepliesController@destroy');
-        Route::patch('/replies/{reply}', 'RepliesController@update');
-
-        Route::post('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsController@store');
-
-        Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
-
-
-
         Route::get('/notifications', 'UserNotificationsController@index');
-        Route::delete('/notifications/{notification}', 'UserNotificationsController@destroy');
+        Route::delete('/notifications/{notification}', 'UserNotificationsController@destroy')->middleware('jwt.auth');;
     }
 );
-
 
 Route::post('login', 'Auth\APILoginController@login');
 // Route::post('logout', 'Auth\LoginController@logout');

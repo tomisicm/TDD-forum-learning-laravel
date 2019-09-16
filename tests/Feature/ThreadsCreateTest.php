@@ -12,7 +12,6 @@ use Tests\Traits\AttachJwtToken;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ThreadsCreateTest extends TestCase
 {
