@@ -27,7 +27,7 @@ trait AttachJwtToken
      */
     protected function getJwtToken()
     {
-        $user = $this->loginUser ?: factory(User::class)->create([]);
+        $user = $this->loginUser;
         return JWTAuth::fromUser($user);
     }
 
@@ -65,6 +65,11 @@ trait AttachJwtToken
      */
     protected function attachToken(array $server)
     {
+
+        if (!$this->loginUser) {
+            return [];
+        }
+
         return array_merge($server, $this->transformHeadersToServerVars([
             'Authorization' => 'bearer ' . $this->getJwtToken(),
         ]));
