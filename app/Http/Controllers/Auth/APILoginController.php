@@ -15,7 +15,7 @@ class APILoginController extends Controller
         // try to auth and get the token using api authentication
         if (!$token = auth('api')->attempt($credentials)) {
 
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['email' => 'Wrong email or password'], 401);
         }
 
         return response()->json([
