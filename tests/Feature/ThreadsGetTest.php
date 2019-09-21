@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Channel;
+
 use App\Reply;
 use App\User;
 use App\Thread;
@@ -46,9 +47,9 @@ class ThreadsGetTest extends TestCase
 
         $threadNotInChannel = factory(Thread::class)->create();
 
-        $resp = $this->get(action('ThreadController@index', $this->thread->channel->slug));
+        $resp = $this->getJson('/api/' .  $this->thread->channel->slug . '/threads')->json();
 
-        $this->assertCount(1, json_decode($resp->content(), true));
+        $this->assertCount(1, $resp);
 
         // $thread = json_decode($resp->content());
         // dd($thread->chanel);
@@ -97,7 +98,7 @@ class ThreadsGetTest extends TestCase
 
         $otherThread = create(Thread::class);
 
-        $this->get(action('ThreadController@index', ['?by=Johnn']))
+        $this->get(action('ThreadController@index', ['by=Johnn']))
             ->assertSee($johnsThread->title)
             ->assertDontSee($otherThread->title);
     }
@@ -111,8 +112,7 @@ class ThreadsGetTest extends TestCase
         $threadWithTwoReplies = create(Thread::class);
         create(Reply::class, ['thread_id' => $threadWithTwoReplies->id], 2);
 
-
-        $response = $this->getJson(action('ThreadController@index', ['?popular=1']))->json();
+        $response = $this->getJson(action('ThreadController@index', ['popular=1']))->json();
 
         $this->assertEquals([2, 0, 0, 0], array_column($response, 'replies_count'));
     }
@@ -124,7 +124,7 @@ class ThreadsGetTest extends TestCase
 
         create(Reply::class, ['thread_id' => create(Thread::class)->id]);
 
-        $response = $this->getJson(action('ThreadController@index', ['?unreplied=0']))->json();
+        $response = $this->getJson(action('ThreadController@index', ['unreplied=0']))->json();
 
         $this->assertCount(Thread::count() - 1, $response);
     }
