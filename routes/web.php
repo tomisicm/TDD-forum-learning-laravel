@@ -9,7 +9,7 @@ Route::group(['prefix' => 'api'], function () {
     // TODO: figure our why this has to be on the second spot
     Route::post('{channel}/threads', 'ThreadController@store')->middleware('jwt.auth');
     Route::delete('{channel}/threads/{thread}', 'ThreadController@destroy')->middleware('jwt.auth');
-    Route::get('{channel}/threads/{thread}', 'ThreadController@show');
+    Route::get('threads/{thread}', 'ThreadController@show');
 });
 
 Route::group(['prefix' => 'api'], function () {

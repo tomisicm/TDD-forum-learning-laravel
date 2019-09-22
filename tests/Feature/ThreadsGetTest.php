@@ -62,7 +62,7 @@ class ThreadsGetTest extends TestCase
         $this->signIn();
 
 
-        $this->get(action('ThreadController@show', [$this->thread->channel->slug, $this->thread]))
+        $this->get(action('ThreadController@show', [$this->thread]))
             ->assertOk()
             ->assertSee($this->thread->id)
             ->assertSee($this->thread->creator)
@@ -80,7 +80,7 @@ class ThreadsGetTest extends TestCase
 
         $replies = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
 
-        $this->get(action('ThreadController@show', [$replies->thread->channel, $replies->thread_id]))
+        $this->get(action('ThreadController@show', [$replies->thread_id]))
             ->assertOk()
             ->assertSee($replies->id)
             ->assertSee($replies->thread->id)
