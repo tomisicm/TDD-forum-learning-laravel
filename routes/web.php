@@ -17,7 +17,7 @@ Route::group(['prefix' => 'api'], function () {
 });
 
 Route::group(['prefix' => 'api'], function () {
-    Route::get('{channel}/threads/{thread}/replies', 'RepliesController@index');
+    Route::get('threads/{thread}/replies', 'RepliesController@index');
     Route::post('threads/{thread}/replies', 'RepliesController@store')->middleware('jwt.auth');
     Route::delete('replies/{reply}', 'RepliesController@destroy')->middleware('jwt.auth');
     Route::patch('replies/{reply}', 'RepliesController@update')->middleware('jwt.auth');
