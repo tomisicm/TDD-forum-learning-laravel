@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 
 // TODO: move all to the api file
-Route::group(['prefix' => 'api'], function () {
+Route::group([], function () {
     Route::get('/channels', 'ChannelController@index');
 });
 
