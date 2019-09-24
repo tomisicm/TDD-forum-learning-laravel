@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Channel;
 
+use App\Http\Controllers\ThreadController;
 use App\Reply;
 use App\User;
 use App\Thread;
@@ -47,6 +48,7 @@ class ThreadsGetTest extends TestCase
 
         $threadNotInChannel = factory(Thread::class)->create();
 
+        // action does not work properly when there are 2 endpoints using same controller
         $resp = $this->getJson('/api/' .  $this->thread->channel->slug . '/threads')->json();
 
         $this->assertCount(1, $resp);
