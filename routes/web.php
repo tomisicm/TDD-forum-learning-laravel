@@ -49,6 +49,8 @@ Route::post('login', 'Auth\APILoginController@login');
 // Registration Routes...
 Route::post('register', 'Auth\RegisterController@register');
 
+Route::get('me', 'Auth\UserController@me')->middleware('jwt.auth');
+
 // Password Reset Routes...
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
