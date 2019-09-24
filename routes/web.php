@@ -1,11 +1,12 @@
 <?php
 
-
+// TODO: move all to the api file
 Route::group(['prefix' => 'api'], function () {
     Route::get('/channels', 'ChannelController@index');
 });
 
 Route::group(['prefix' => 'api'], function () {
+    // TODO: only one should exist
     Route::get('{channel}/threads', 'ThreadController@index');
     Route::get('threads', 'ThreadController@index');
     // TODO: figure our why this has to be on the second spot
