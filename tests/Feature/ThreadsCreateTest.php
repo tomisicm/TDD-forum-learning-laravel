@@ -63,7 +63,7 @@ class ThreadsCreateTest extends TestCase
 
         $thread = create(Thread::class);
 
-        $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
+        $this->delete(action('ThreadController@destroy', [$thread->id]))
             ->assertStatus(403);
 
         $this->assertDatabaseHas('threads', $thread->attributesToArray());
@@ -76,7 +76,7 @@ class ThreadsCreateTest extends TestCase
 
         $this->loginAs($thread->creator);
 
-        $this->delete(action('ThreadController@destroy', [$thread->channel->name, $thread->id]))
+        $this->delete(action('ThreadController@destroy', [$thread->id]))
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('threads', $thread->attributesToArray());
@@ -91,7 +91,7 @@ class ThreadsCreateTest extends TestCase
 
         $this->loginAs($reply->thread->creator);
 
-        $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
+        $this->delete(action('ThreadController@destroy', [$reply->thread->id]))
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('activities', $threadActivity);
@@ -113,7 +113,7 @@ class ThreadsCreateTest extends TestCase
 
         $this->loginAs($reply->thread->creator);
 
-        $this->delete(action('ThreadController@destroy', [$reply->thread->channel->name, $reply->thread->id]))
+        $this->delete(action('ThreadController@destroy', [$reply->thread->id]))
             ->assertStatus(204);
 
         $this->assertDatabaseMissing('replies', $reply->attributesToArray());

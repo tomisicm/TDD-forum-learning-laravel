@@ -13,7 +13,7 @@ Route::group([], function () {
     Route::get('threads', 'ThreadController@index');
     // TODO: figure our why this has to be on the second spot
     Route::post('{channel}/threads', 'ThreadController@store')->middleware('jwt.auth');
-    Route::delete('{channel}/threads/{thread}', 'ThreadController@destroy')->middleware('jwt.auth');
+    Route::delete('threads/{thread}', 'ThreadController@destroy')->middleware('jwt.auth');
     Route::get('threads/{thread}', 'ThreadController@show');
 });
 
