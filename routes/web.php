@@ -1,7 +1,9 @@
 <?php
 
 
-Route::get('/channels', 'ChannelController@index');
+Route::group(['prefix' => 'api'], function () {
+    Route::get('/channels', 'ChannelController@index');
+});
 
 Route::group(['prefix' => 'api'], function () {
     Route::get('{channel}/threads', 'ThreadController@index');
