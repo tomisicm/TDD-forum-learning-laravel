@@ -126,7 +126,7 @@ class ThreadsGetTest extends TestCase
 
         create(Reply::class, ['thread_id' => create(Thread::class)->id]);
 
-        $response = $this->getJson(action('ThreadController@index', ['unreplied=0']))->json();
+        $response = $this->getJson(action('ThreadController@index', ['replied=0']))->json();
 
         $this->assertCount(Thread::count() - 1, $response);
     }

@@ -44,6 +44,24 @@ class ThreadController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Thread  $thread
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Thread $thread)
+    {
+        $attributes = request()->validate([
+            'title' => 'required|min:3',
+            'body' => 'required|max:512|spamfree'
+        ]);
+
+        $thread->update($attributes);
+
+        return $thread;
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  mixed $channel
@@ -70,17 +88,6 @@ class ThreadController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
