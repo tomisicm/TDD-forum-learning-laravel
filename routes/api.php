@@ -26,8 +26,11 @@ Route::group([], function () {
 Route::group([], function () {
     Route::get('threads/{thread}/replies', 'RepliesController@index');
     Route::post('threads/{thread}/replies', 'RepliesController@store')->middleware('jwt.auth');
+
+    Route::put('replies/{reply}', 'RepliesController@update')->middleware('jwt.auth');
     Route::delete('replies/{reply}', 'RepliesController@destroy')->middleware('jwt.auth');
     Route::patch('replies/{reply}', 'RepliesController@update')->middleware('jwt.auth');
+
 
     Route::post('{channel}/threads/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
 
