@@ -36,9 +36,9 @@ class RepliesController extends Controller
             'thread_id' => $thread->id
         ];
 
-        $thread->addReply($attributes);
+        $reply = $thread->addReply($attributes);
 
-        return $thread->replies;
+        return $reply->load('creator');
     }
 
     /**
