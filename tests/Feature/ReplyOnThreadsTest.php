@@ -43,7 +43,7 @@ class ReplyOnThreads extends TestCase
         ]);
 
         $this->post(action('RepliesController@store', $thread), $reply->toArray())
-            ->assertOk()
+            ->assertStatus(201)
             ->assertSee($reply->body);
     }
 
