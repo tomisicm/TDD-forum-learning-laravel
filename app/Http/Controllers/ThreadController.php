@@ -73,7 +73,7 @@ class ThreadController extends Controller
     {
         return $thread->load('creator')
             ->append('isSubscribedTo')
-            ->append('subscriptions');
+            ->append('subscriptionsCount');
     }
 
     /**

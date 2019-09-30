@@ -23,7 +23,7 @@ class ThreadsSubscribeTest extends TestCase
 
         $this->loginAs(create(User::class));
 
-        $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
+        $this->post(action('SubscriptionsController@store', [$thread->id]))
             ->assertOk();
 
         $this->assertDatabaseHas('thread_subscriptions', [
@@ -41,7 +41,7 @@ class ThreadsSubscribeTest extends TestCase
 
         $thread->subscribe($user->id);
 
-        $this->post(action('SubscriptionsController@store', [$thread->channel->name, $thread->id]))
+        $this->post(action('SubscriptionsController@store', [$thread->id]))
             ->assertOk();
 
         $this->assertDatabaseMissing('thread_subscriptions', [
