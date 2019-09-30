@@ -32,7 +32,7 @@ Route::group([], function () {
     Route::patch('replies/{reply}', 'RepliesController@update')->middleware('jwt.auth');
 
 
-    Route::post('{channel}/threads/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
+    Route::post('/threads/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
 
     Route::post('replies/{reply}/favorites', 'FavoritesController@store')->middleware('jwt.auth');
 });
