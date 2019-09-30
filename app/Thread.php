@@ -176,4 +176,9 @@ class Thread extends Model
     {
         return $this->hasSubscription(auth()->id());
     }
+
+    public function getSubscriptionsAttribute()
+    {
+        return $this->subscriptions()->count();
+    }
 }

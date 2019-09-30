@@ -15,9 +15,9 @@ class RepliesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel, Thread $thread)
+    public function index(Thread $thread)
     {
-        return $thread->replies()->paginate(5);
+        return $thread->replies()->withCount('favorites')->paginate(5);
     }
 
     /**

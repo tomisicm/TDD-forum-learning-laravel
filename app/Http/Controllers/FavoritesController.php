@@ -16,8 +16,8 @@ class FavoritesController extends Controller
      */
     public function store(Request $request, Reply $reply)
     {
-        $user = auth()->id();
+        $isFavorited = $reply->handleFavorite(auth()->id());
 
-        return $reply->handleFavorite($user);
+        return response([$isFavorited], 200);
     }
 }

@@ -71,9 +71,9 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        // TODO: missing subscribers count
         return $thread->load('creator')
-            ->append('isSubscribedTo');
+            ->append('isSubscribedTo')
+            ->append('subscriptions');
     }
 
     /**
