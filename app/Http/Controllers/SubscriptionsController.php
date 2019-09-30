@@ -16,7 +16,8 @@ class SubscriptionsController extends Controller
      */
     public function store(Channel $channel, Thread $thread)
     {
-        $thread->handleSubscribe(auth()->id());
-        return response([], 200);
+        $isSubscribed = $thread->handleSubscribe(auth()->id());
+
+        return response([$isSubscribed], 200);
     }
 }

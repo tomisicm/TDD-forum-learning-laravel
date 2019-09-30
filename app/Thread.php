@@ -124,9 +124,11 @@ class Thread extends Model
     public function handleSubscribe($userId = null)
     {
         if (!$this->hasSubscription($userId ?: auth()->id())) {
-            return $this->subscribe($userId ?: auth()->id());
+            $this->subscribe($userId ?: auth()->id());
+            return true;
         }
-        return $this->unsubscribe($userId ?: auth()->id());
+        $this->unsubscribe($userId ?: auth()->id());
+        return false;
     }
 
     /**
@@ -172,6 +174,6 @@ class Thread extends Model
 
     public function getIsSubscribedToAttribute()
     {
-        $this->hasSubscription(auth()->id());
+        return $this->hasSubscription(auth()->id());
     }
 }

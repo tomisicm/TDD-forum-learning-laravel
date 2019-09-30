@@ -37,10 +37,6 @@ Route::group([], function () {
     Route::post('replies/{reply}/favorites', 'FavoritesController@store')->middleware('jwt.auth');
 });
 
-Route::group([], function () {
-    Route::post('{channel}/threads/{thread}/subscriptions', 'SubscriptionsController@store')->middleware('jwt.auth');
-    Route::post('replies/{reply}/favorites', 'FavoritesController@store')->middleware('jwt.auth');
-});
 
 Route::group(
     [
