@@ -71,10 +71,8 @@ class ThreadController extends Controller
      */
     public function show(Channel $channel, Thread $thread)
     {
-        // TODO: its better here than on the relation
-        return $thread->load('creator')->load(['replies' => function ($query) {
-            $query->withCount('favorites');
-        }])->append('isSubscribedTo');
+        return $thread->load('creator')
+            ->append('isSubscribedTo');
     }
 
     /**
